@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { withRouter } from 'react-router-dom'
 import Login from './Containers/Login'
 import DesktopContainer from './Containers/HomePage'
 import {connect} from "react-redux"
 import {authorize} from "./Actions/AuthActions"
-import logo from './logo.svg';
 import './App.css';
-import Artists from './Containers/Artists'
-import Genres from './Containers/Genres'
-import Tracks from './Containers/Tracks'
 
 class App extends Component {
 
