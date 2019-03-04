@@ -2,8 +2,8 @@ import React, {Component} from 'react'
 import {connect} from "react-redux"
 import {getTracks} from ".././Actions/TrackActions"
 import {getTrackRecs} from ".././Actions/RecommendationActions"
-import {Grid} from "semantic-ui-react"
-import { VictoryGroup, VictoryScatter, VictoryLegend, VictoryLabel } from 'victory'
+import {Grid, Button, Header} from "semantic-ui-react"
+import { VictoryGroup, VictoryScatter, VictoryLegend, VictoryLabel, VictoryZoomContainer } from 'victory'
 
 class Tracks extends Component {
 
@@ -35,33 +35,42 @@ class Tracks extends Component {
         <Grid>
             <Grid.Row columns={2}>
               <Grid.Column>
-              <VictoryGroup>
+                <Header as='h2' textAlign='center'>
+                    My Top Tracks
+                </Header>
                 <VictoryScatter
+                padding={65}
+                containerComponent={<VictoryZoomContainer zoomDomain={{x: [0, 100], y: [0, 100]}}/>}
                 style={{
                   data: { fill: "#c43a31" },
-                  labels: {fontSize: 6} }
+                  labels: {fontSize: 10} }
                 }
                 bubbleProperty="popularity"
                 maxBubbleSize={13.5}
                 minBubbleSize={5}
                 data={this.state.mappedTracks.map((track, index) => {
-                  return {x: index + 900 , y:Math.random(0,100), popularity: track.popularity}})
+                  return {x: index + 100 , y:Math.random(0,100), popularity: track.popularity}})
                 }
                 labels={this.state.mappedTracks.map(track => `${track.attributes.name}
                   Popularity: ${track.popularity}`)}
                 labelComponent={<VictoryLabel dy={-10}/>}
                   />
-                </VictoryGroup>
                   </Grid.Column>
                   <Grid.Column>
+                    <Header as='h2' textAlign='center'>
+                        My Recommendations
+                    </Header>
+                    <Button onClick={this.props.getTrackRecs}>Update Recommendations</Button>
                   <VictoryScatter
+                  padding={65}
+                  containerComponent={<VictoryZoomContainer zoomDomain={{x: [0, 100], y: [0, 100]}}/>}
                   style={{
                     data: { fill: "blue" },
-                    labels: {fontSize: 6} }
+                    labels: {fontSize: 10} }
                   }
                   size={13}
                   data={this.props.track_recommendations.map((track, index) => {
-                    return {x: index + 900 , y:Math.random(0,100) , name: track.name}})
+                    return {x: index + 100 , y:Math.random(0,100) , name: track.name}})
                   }
                   labels={this.props.track_recommendations.map(track => track.attributes.name)}
                   labelComponent={<VictoryLabel dy={-10}/>}

@@ -4,6 +4,7 @@ import Login from './Containers/Login'
 import DesktopContainer from './Containers/HomePage'
 import {connect} from "react-redux"
 import {authorize} from "./Actions/AuthActions"
+import {checkAuthorization} from "./Actions/AuthActions"
 import './App.css';
 
 class App extends Component {
@@ -14,7 +15,13 @@ class App extends Component {
       this.props.authorize(id)
       .then(() => this.props.history.push("/"))
 		}
+    else if (localStorage.getItem("jwt")) {
+      this.props.checkAuthorization()
+      .then(() => this.props.history.push("/"))
+    }
   }
+
+
 
   render() {
     return (
@@ -32,7 +39,8 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-    authorize
+    authorize,
+    checkAuthorization
 }
 
 

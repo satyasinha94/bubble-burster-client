@@ -21,12 +21,12 @@ class DesktopContainer extends Component {
     return (
       <div>
       <Router>
-      <React.Fragment>
-        <NavBar />
-        <Route exact path="/tracks" component={Tracks}/>
-        <Route exact path="/genres" component={Genres}/>
-        <Route exact path="/artists" component={Artists}/>
-      </React.Fragment>
+        <React.Fragment>
+          <NavBar />
+          <Route exact path="/tracks" component={Tracks}/>
+          <Route exact path="/genres" component={Genres}/>
+          <Route exact path="/artists" component={Artists}/>
+        </React.Fragment>
       </Router>
       </div>
     )

@@ -2,8 +2,9 @@ import React, {Component} from 'react'
 import {connect} from "react-redux"
 import {getArtists} from ".././Actions/ArtistActions"
 import {getArtistRecs} from ".././Actions/RecommendationActions"
-import {Grid, Header} from "semantic-ui-react"
-import { VictoryGroup, VictoryScatter, VictoryLegend, VictoryLabel, VictoryZoomContainer, VictoryTooltip } from 'victory'
+import {Grid, Header, Button, Divider} from "semantic-ui-react"
+import { VictoryTheme, VictoryScatter, VictoryLabel, createContainer } from 'victory'
+const VictoryZoomVoronoiContainer = createContainer("zoom", "voronoi");
 class Artists extends Component {
 
   state = {
@@ -27,53 +28,69 @@ class Artists extends Component {
     })
   }
 
+
   render(){
     return (
       <React.Fragment>
-        <Grid className="chart">
-            <Grid.Row columns={2}>
+        <Grid columns={2}>
               <Grid.Column>
                 <Header as='h2' textAlign='center'>
-                  My Tracks
+                  My Top Artists
                 </Header>
                 <VictoryScatter
-                padding={65}
-                containerComponent={<VictoryZoomContainer zoomDomain={{x: [0, 100], y: [0, 100]}}/>}
+                width={600}
+                height={600}
+                padding={100}
+                containerComponent={
+                  <VictoryZoomVoronoiContainer
+                    labels={(d) => `${d.name}, Popularity: ${d.popularity}`}
+                  />
+                }
                 style={{
-                  data: { fill: "#c43a31" },
-                  labels: {fontSize: 10} }
+                  data: { fill: "#fa4659" },
+                  labels: {fontSize: 12.5},
+                  parent: {border: "1px dotted black"},
+                }
                 }
                 bubbleProperty="popularity"
-                maxBubbleSize={20}
-                minBubbleSize={2.5}
+                maxBubbleSize={22}
+                minBubbleSize={3.5}
                 data={this.state.mappedArtists.map((artist, index) => {
-                  return {x: index + 100 , y:Math.random(0,100), label: artist.name, popularity: artist.popularity}})
+                  return {x: index + 40 , y:Math.random(0,75), popularity: artist.popularity, name: artist.attributes.name}})
                 }
                 labels={this.state.mappedArtists.map(artist => `${artist.attributes.name}
                   Popularity: ${artist.popularity}`)}
-                labelComponent={<VictoryLabel dy={-10}/>}
+                labelComponent={<VictoryLabel dy={-17.5}/>}
                   />
                   </Grid.Column>
                   <Grid.Column>
                   <Header as='h2' textAlign='center'>
                     My Recommendations
                   </Header>
+                  <Button onClick={this.props.getArtistRecs}>Update Recommendations</Button>
                   <VictoryScatter
-                  containerComponent={<VictoryZoomContainer zoomDomain={{x: [0, 100], y: [0, 100]}}/>}
-                  padding={65}
+                  width={600}
+                  height={600}
+                  containerComponent={<VictoryZoomVoronoiContainer
+                    labels={(d) => `${d.artist_name} - ${d.name}`}
+                  />}
+                  padding={100}
                   style={{
-                    data: { fill: "blue" },
-                    labels: {fontSize: 9} }
+                    data: { fill: "#11cbd7" },
+                    labels: {fontSize: 12.5},
+                    parent: {border: "1px dotted black"}
                   }
-                  size={15}
+                  }
+                  bubbleProperty="popularity"
+                  maxBubbleSize={22}
+                  minBubbleSize={3.5}
                   data={this.props.artist_recommendations.map((track, index) => {
-                    return {x: index + 100 , y:Math.random(0,100) , name: track.name}})
+                    return {x: index + 40 , y:Math.random(0,75), popularity: track.attributes.popularity, name: track.attributes.name, artist_name: track.attributes["artist-name"]}})
                   }
-                  labels={this.props.artist_recommendations.map(track => `${track.attributes.name} - ${track.attributes["artist-name"]}`)}
-                  labelComponent={<VictoryLabel dy={-10}/>}
+                  labels={this.props.artist_recommendations.map(track => `${track.attributes["artist-name"]} - ${track.attributes.name}`)}
+                  labelComponent={<VictoryLabel dy={-17.5}/>}
                   />
               </Grid.Column>
-            </Grid.Row>
           </Grid>
         </React.Fragment>
     )
