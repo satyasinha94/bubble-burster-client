@@ -1,6 +1,7 @@
 export default (
   state={
   LoggedIn: false,
+  player: {},
   user: {
     username: null,
     spotify_url: null,
@@ -17,9 +18,12 @@ export default (
       localStorage.removeItem("jwt")
       localStorage.removeItem("access_token")
       localStorage.removeItem("refresh_token")
+      state.player.disconnect()
       console.log("logged out")
       window.history.go("/")
       return {...state, LoggedIn: false, user:{username: null, spotify_url: null, profile_img_url: null, access_token: null, refresh_token: null, expires_in: null}}
+    case ("ADD_PLAYER"):
+      return {...state, player: action.payload}
     default:
       return state
   }

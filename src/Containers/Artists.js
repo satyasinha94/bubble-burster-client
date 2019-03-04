@@ -28,6 +28,32 @@ class Artists extends Component {
     })
   }
 
+  playTrack = (uri) => {
+    fetch("https://api.spotify.com/v1/me/player/play", {
+     method: "PUT",
+     headers: {
+       authorization: `Bearer ${localStorage.getItem('access_token')}`,
+       "Content-Type": "application/json",
+     },
+     body: JSON.stringify({
+       "uris": [`${uri}`]
+     })
+   })
+  }
+
+  playArtist = (uri) => {
+    fetch("https://api.spotify.com/v1/me/player/play", {
+     method: "PUT",
+     headers: {
+       authorization: `Bearer ${localStorage.getItem('access_token')}`,
+       "Content-Type": "application/json",
+     },
+     body: JSON.stringify({
+       "context_uri": `${uri}`
+     })
+   })
+  }
+
 
   render(){
     return (
@@ -56,8 +82,19 @@ class Artists extends Component {
                 maxBubbleSize={22}
                 minBubbleSize={3.5}
                 data={this.state.mappedArtists.map((artist, index) => {
-                  return {x: index + 40 , y:Math.random(0,75), popularity: artist.popularity, name: artist.attributes.name}})
+                  return {x: index + 75 , y:Math.random(0,100), uri: artist.attributes.uri, popularity: artist.popularity, name: artist.attributes.name}})
                 }
+                events={[
+                 {
+                   target: "data",
+                   eventHandlers: {
+                     onClick: () => ({
+                       target: "data",
+                       mutation: (evt) => this.playArtist(evt.datum.uri)
+                     })
+                   }
+                 }
+               ]}
                 labels={this.state.mappedArtists.map(artist => `${artist.attributes.name}
                   Popularity: ${artist.popularity}`)}
                 labelComponent={<VictoryLabel dy={-17.5}/>}
@@ -74,7 +111,7 @@ class Artists extends Component {
                   containerComponent={<VictoryZoomVoronoiContainer
                     labels={(d) => `${d.artist_name} - ${d.name}`}
                   />}
-                  padding={100}
+                  padding={120}
                   style={{
                     data: { fill: "#11cbd7" },
                     labels: {fontSize: 12.5},
@@ -85,10 +122,21 @@ class Artists extends Component {
                   maxBubbleSize={22}
                   minBubbleSize={3.5}
                   data={this.props.artist_recommendations.map((track, index) => {
-                    return {x: index + 40 , y:Math.random(0,75), popularity: track.attributes.popularity, name: track.attributes.name, artist_name: track.attributes["artist-name"]}})
+                    return {x: index + 75 , y:Math.random(0,100), uri: track.attributes.uri, popularity: track.attributes.popularity, name: track.attributes.name, artist_name: track.attributes["artist-name"]}})
                   }
                   labels={this.props.artist_recommendations.map(track => `${track.attributes["artist-name"]} - ${track.attributes.name}`)}
                   labelComponent={<VictoryLabel dy={-17.5}/>}
+                  events={[
+                   {
+                     target: "data",
+                     eventHandlers: {
+                       onClick: () => ({
+                         target: "data",
+                         mutation: (evt) => this.playTrack(evt.datum.uri)
+                       })
+                     }
+                   }
+                 ]}
                   />
               </Grid.Column>
           </Grid>

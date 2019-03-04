@@ -30,3 +30,10 @@ export function logout() {
           dispatch({type: "LOGIN", payload: myJson.user})})
       }
     }
+
+  export function addPlayer(player) {
+    return {
+      type: "ADD_PLAYER",
+      payload: player
+    }
+  }

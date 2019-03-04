@@ -5,23 +5,62 @@ import DesktopContainer from './Containers/HomePage'
 import {connect} from "react-redux"
 import {authorize} from "./Actions/AuthActions"
 import {checkAuthorization} from "./Actions/AuthActions"
+import {addPlayer} from "./Actions/AuthActions"
 import './App.css';
 
 class App extends Component {
+
+  constructor(props) {
+  super(props);
+  this.checkForPlayerInterval = null;
+}
 
   componentDidMount(){
     if (window.location.href.includes("user_id")) {
       let id = parseInt(window.location.href.split("=")[1])
       this.props.authorize(id)
       .then(() => this.props.history.push("/"))
+      this.checkForPlayerInterval = setInterval(() => this.checkForPlayer(), 1000)
 		}
     else if (localStorage.getItem("jwt")) {
       this.props.checkAuthorization()
       .then(() => this.props.history.push("/"))
+      this.checkForPlayerInterval = setInterval(() => this.checkForPlayer(), 1000)
     }
   }
 
+  transferPlayBack = (player) => {
+    fetch("https://api.spotify.com/v1/me/player", {
+     method: "PUT",
+     headers: {
+       authorization: `Bearer ${localStorage.getItem('access_token')}`,
+       "Content-Type": "application/json",
+     },
+     body: JSON.stringify({
+       "device_ids": [`${player._options.id}`],
+       "play": false,
+     })
+   })
+  }
 
+  checkForPlayer = () => {
+    if (window.Spotify) {
+      clearInterval(this.checkForPlayerInterval)
+      const token = localStorage.getItem('access_token')
+      const player = new window.Spotify.Player({
+        name: 'Mixocracy Player',
+        getOAuthToken: cb => { cb(token); }
+      })
+      player.connect()
+      player.addListener('ready', () => {
+          this.props.addPlayer(player)
+          this.transferPlayBack(player)
+      })
+  }
+    else {
+      console.log('player not ready')
+    }
+  }
 
   render() {
     return (
@@ -34,13 +73,15 @@ class App extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    auth: state.auth
+    auth: state.auth,
+    device: state.device
     }
 }
 
 const mapDispatchToProps = {
     authorize,
-    checkAuthorization
+    checkAuthorization,
+    addPlayer
 }
 
 
