@@ -2,8 +2,8 @@ import React, {Component} from 'react'
 import {connect} from "react-redux"
 import {getArtists} from ".././Actions/ArtistActions"
 import {getArtistRecs} from ".././Actions/RecommendationActions"
-import {Grid, Header, Button, Divider} from "semantic-ui-react"
-import { VictoryTheme, VictoryScatter, VictoryLabel, createContainer } from 'victory'
+import {Grid, Header, Button} from "semantic-ui-react"
+import {VictoryScatter, VictoryLabel, createContainer } from 'victory'
 const VictoryZoomVoronoiContainer = createContainer("zoom", "voronoi");
 class Artists extends Component {
 

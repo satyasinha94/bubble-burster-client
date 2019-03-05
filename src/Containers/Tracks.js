@@ -3,7 +3,9 @@ import {connect} from "react-redux"
 import {getTracks} from ".././Actions/TrackActions"
 import {getTrackRecs} from ".././Actions/RecommendationActions"
 import {Grid, Button, Header} from "semantic-ui-react"
-import { VictoryGroup, VictoryScatter, VictoryLegend, VictoryLabel, VictoryZoomContainer } from 'victory'
+import { VictoryGroup, VictoryLegend, VictoryZoomContainer } from 'victory'
+import {VictoryScatter, VictoryLabel, createContainer } from 'victory'
+const VictoryZoomVoronoiContainer = createContainer("zoom", "voronoi");
 
 class Tracks extends Component {
 
@@ -29,57 +31,103 @@ class Tracks extends Component {
     })
   }
 
+  playTrack = (uri) => {
+    fetch("https://api.spotify.com/v1/me/player/play", {
+     method: "PUT",
+     headers: {
+       authorization: `Bearer ${localStorage.getItem('access_token')}`,
+       "Content-Type": "application/json",
+     },
+     body: JSON.stringify({
+       "uris": [`${uri}`]
+     })
+   })
+  }
+
   render() {
     return (
       <React.Fragment>
-        <Grid>
-            <Grid.Row columns={2}>
+        <Grid columns={2}>
               <Grid.Column>
                 <Header as='h2' textAlign='center'>
-                    My Top Tracks
+                  My Top Artists
                 </Header>
                 <VictoryScatter
-                padding={65}
-                containerComponent={<VictoryZoomContainer zoomDomain={{x: [0, 100], y: [0, 100]}}/>}
+                width={600}
+                height={600}
+                padding={100}
+                containerComponent={
+                  <VictoryZoomVoronoiContainer
+                    labels={(d) => `${d.name}, Popularity: ${d.popularity}`}
+                  />
+                }
                 style={{
-                  data: { fill: "#c43a31" },
-                  labels: {fontSize: 10} }
+                  data: { fill: "#fa4659" },
+                  labels: {fontSize: 12.5},
+                  parent: {border: "1px dotted black"},
+                }
                 }
                 bubbleProperty="popularity"
-                maxBubbleSize={13.5}
-                minBubbleSize={5}
+                maxBubbleSize={22}
+                minBubbleSize={3.5}
                 data={this.state.mappedTracks.map((track, index) => {
-                  return {x: index + 100 , y:Math.random(0,100), popularity: track.popularity}})
+                  return {x: index + 75 , y:Math.random(0,100), uri: track.attributes.uri, popularity: track.popularity, name: track.attributes.name}})
                 }
                 labels={this.state.mappedTracks.map(track => `${track.attributes.name}
                   Popularity: ${track.popularity}`)}
-                labelComponent={<VictoryLabel dy={-10}/>}
+                labelComponent={<VictoryLabel dy={-17.5}/>}
+                events={[
+                 {
+                   target: "data",
+                   eventHandlers: {
+                     onClick: () => ({
+                       target: "data",
+                       mutation: (evt) => this.playTrack(evt.datum.uri)
+                     })
+                   }
+                 }
+               ]}
                   />
                   </Grid.Column>
                   <Grid.Column>
-                    <Header as='h2' textAlign='center'>
-                        My Recommendations
-                    </Header>
-                    <Button onClick={this.props.getTrackRecs}>Update Recommendations</Button>
+                  <Header as='h2' textAlign='center'>
+                    My Recommendations
+                  </Header>
+                  <Button onClick={this.props.getTrackRecs}>Update Recommendations</Button>
                   <VictoryScatter
-                  padding={65}
-                  containerComponent={<VictoryZoomContainer zoomDomain={{x: [0, 100], y: [0, 100]}}/>}
+                  width={600}
+                  height={600}
+                  containerComponent={<VictoryZoomVoronoiContainer
+                    labels={(d) => `${d.artist_name} - ${d.name}`}
+                  />}
+                  padding={120}
                   style={{
-                    data: { fill: "blue" },
-                    labels: {fontSize: 10} }
+                    data: { fill: "#11cbd7" },
+                    labels: {fontSize: 12.5},
+                    parent: {border: "1px dotted black"}
                   }
-                  size={13}
+                  }
+                  bubbleProperty="popularity"
+                  maxBubbleSize={22}
+                  minBubbleSize={3.5}
                   data={this.props.track_recommendations.map((track, index) => {
-                    return {x: index + 100 , y:Math.random(0,100) , name: track.name}})
+                    return {x: index + 75 , y:Math.random(0,100), uri: track.attributes.uri, popularity: track.attributes.popularity, name: track.attributes.name, artist_name: track.attributes["artist-name"]}})
                   }
-                  labels={this.props.track_recommendations.map(track => track.attributes.name)}
-                  labelComponent={<VictoryLabel dy={-10}/>}
+                  labels={this.props.track_recommendations.map(track => `${track.attributes["artist-name"]} - ${track.attributes.name}`)}
+                  labelComponent={<VictoryLabel dy={-17.5}/>}
+                  events={[
+                   {
+                     target: "data",
+                     eventHandlers: {
+                       onClick: () => ({
+                         target: "data",
+                         mutation: (evt) => this.playTrack(evt.datum.uri)
+                       })
+                     }
+                   }
+                 ]}
                   />
               </Grid.Column>
-            </Grid.Row>
-            <Grid.Column>
-              <VictoryLegend/>
-            </Grid.Column>
           </Grid>
         </React.Fragment>
     )
