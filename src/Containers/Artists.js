@@ -76,7 +76,6 @@ class Artists extends Component {
                 style={{
                   data: { fill: "#fa4659" },
                   labels: {fontSize: 12.5},
-                  parent: {border: "1px dotted black"},
                 }
                 }
                 bubbleProperty="popularity"
@@ -107,6 +106,7 @@ class Artists extends Component {
                   </Header>
                   <Button onClick={this.props.getArtistRecs}>Update Recommendations</Button>
                   <VictoryScatter
+                  animate={{ duration: 200 }}
                   width={600}
                   height={600}
                   containerComponent={<VictoryZoomVoronoiContainer
@@ -116,7 +116,6 @@ class Artists extends Component {
                   style={{
                     data: { fill: "#11cbd7" },
                     labels: {fontSize: 12.5},
-                    parent: {border: "1px dotted black"}
                   }
                   }
                   bubbleProperty="popularity"

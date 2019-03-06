@@ -1,4 +1,3 @@
-export function getAllRecs() {
 export function getGenreRecs() {
   return (dispatch) => {
     console.log("getting genre recs")

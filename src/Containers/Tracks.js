@@ -53,6 +53,7 @@ class Tracks extends Component {
                   My Top Tracks
                 </Header>
                 <VictoryScatter
+                animate={{ duration: 200 }}
                 width={600}
                 height={600}
                 padding={ {top: 100, bottom: 150, left: 100, right: 100} }
@@ -64,7 +65,6 @@ class Tracks extends Component {
                 style={{
                   data: { fill: "#fa4659" },
                   labels: {fontSize: 12.5},
-                  parent: {border: "1px dotted black"},
                 }
                 }
                 bubbleProperty="popularity"
@@ -95,6 +95,7 @@ class Tracks extends Component {
                   </Header>
                   <Button onClick={this.props.getTrackRecs}>Update Recommendations</Button>
                   <VictoryScatter
+                  animate={{ duration: 200 }}
                   width={600}
                   height={600}
                   containerComponent={<VictoryZoomVoronoiContainer
@@ -104,7 +105,6 @@ class Tracks extends Component {
                   style={{
                     data: { fill: "#11cbd7" },
                     labels: {fontSize: 12.5},
-                    parent: {border: "1px dotted black"}
                   }
                   }
                   bubbleProperty="popularity"

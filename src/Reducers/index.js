@@ -11,7 +11,6 @@ const rootReducer = combineReducers({
   artists: artistReducer,
   genres: genreReducer,
   tracks: trackReducer,
-  recs: recommendationReducer
   recs: recommendationReducer,
   playBack: playBackReducer
 })

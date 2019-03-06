@@ -48,7 +48,6 @@ class DesktopContainer extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    auth: state.auth
     auth: state.auth,
     player: state.player,
     playBack: state.playBack

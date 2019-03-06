@@ -31,8 +31,7 @@
     transform: rotate(360deg);
   }
 }
-<<<<<<< Updated upstream
-=======
+
 .column {
   height: 80vh;
 }
@@ -54,8 +53,3 @@
   width: 25%;
   height: 25%;
 }
-
-.item {
-  text-overflow: ellipsis;
-}
->>>>>>> Stashed changes

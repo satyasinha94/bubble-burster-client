@@ -32,34 +32,6 @@ class App extends Component {
     }
   }
 
-  onStateChanged(state) {
-    // only update if we got a real state
-    if (state !== null) {
-      const {
-        current_track: currentTrack,
-        position,
-        duration,
-      } = state.track_window;
-      const trackName = currentTrack.name;
-      const albumName = currentTrack.album.name;
-      const artistName = currentTrack.artists
-        .map(artist => artist.name)
-        .join(", ");
-      const playing = !state.paused;
-      this.setState({
-        position,
-        duration,
-        trackName,
-        albumName,
-        artistName,
-        playing
-      });
-    } else {
-      // state was null, user might have swapped to another device
-      this.setState({ error: "Looks like you might have swapped to another device?" });
-    }
-  }
-
   transferPlayBack = (player) => {
     fetch("https://api.spotify.com/v1/me/player", {
      method: "PUT",
