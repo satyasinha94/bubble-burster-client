@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom'
 import Login from './Containers/Login'
 import DesktopContainer from './Containers/HomePage'
+import { BrowserRouter as Router} from 'react-router-dom';
 import {connect} from "react-redux"
 import {authorize} from "./Actions/AuthActions"
 import {checkAuthorization} from "./Actions/AuthActions"
 import {addPlayer} from "./Actions/AuthActions"
+import {updatePlayBack} from "./Actions/PlayerActions"
+import Player from './Components/PlayerComponent'
 import './App.css';
 
 class App extends Component {
@@ -56,6 +59,7 @@ class App extends Component {
           this.props.addPlayer(player)
           this.transferPlayBack(player)
       })
+      player.addListener('player_state_changed', state => this.props.updatePlayBack(state));
   }
     else {
       console.log('player not ready')
@@ -74,14 +78,14 @@ class App extends Component {
 const mapStateToProps = (state) => {
   return {
     auth: state.auth,
-    device: state.device
     }
 }
 
 const mapDispatchToProps = {
     authorize,
     checkAuthorization,
-    addPlayer
+    addPlayer,
+    updatePlayBack
 }
 
 

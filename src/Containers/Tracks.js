@@ -50,21 +50,21 @@ class Tracks extends Component {
         <Grid columns={2}>
               <Grid.Column>
                 <Header as='h2' textAlign='center'>
-                  My Top Artists
+                  My Top Tracks
                 </Header>
                 <VictoryScatter
                 animate={{ duration: 200 }}
                 width={600}
                 height={600}
-                padding={100}
+                padding={ {top: 100, bottom: 150, left: 100, right: 100} }
                 containerComponent={
                   <VictoryZoomVoronoiContainer
-                    labels={(d) => `${d.name}, Popularity: ${d.popularity}`}
+                    labels={(datum) => `${datum.name}, Popularity: ${datum.popularity}`}
                   />
                 }
                 style={{
                   data: { fill: "#fa4659" },
-                  labels: {fontSize: 12.5}
+                  labels: {fontSize: 12.5},
                 }
                 }
                 bubbleProperty="popularity"
@@ -101,7 +101,7 @@ class Tracks extends Component {
                   containerComponent={<VictoryZoomVoronoiContainer
                     labels={(d) => `${d.artist_name} - ${d.name}`}
                   />}
-                  padding={120}
+                  padding={ {top: 100, bottom: 150, left: 100, right: 100} }
                   style={{
                     data: { fill: "#11cbd7" },
                     labels: {fontSize: 12.5}
