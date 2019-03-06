@@ -6,6 +6,8 @@ import {logout} from ".././Actions/AuthActions"
 import Artists from './Artists'
 import Genres from './Genres'
 import Tracks from './Tracks'
+import Player from '../Components/PlayerComponent'
+import {Modal, Header, Button, Icon} from 'semantic-ui-react'
 
 
 /* eslint-disable react/no-multi-comp */
@@ -26,6 +28,17 @@ class DesktopContainer extends Component {
           <Route exact path="/tracks" component={Tracks}/>
           <Route exact path="/genres" component={Genres}/>
           <Route exact path="/artists" component={Artists}/>
+          <Player/>
+          <Modal defaultOpen closeIcon>
+            <Modal.Content>
+              <Header textAlign="center">
+                Welcome to Bubble Burster!
+              </Header>
+              <Header.Subheader textAlign="center">
+                Click on Top Tracks, Top Artists, or Genres in the NavBar to see your listening habits and get song recommendations.
+              </Header.Subheader>
+            </Modal.Content>
+          </Modal>
         </React.Fragment>
       </Router>
       </div>
@@ -36,6 +49,9 @@ class DesktopContainer extends Component {
 const mapStateToProps = (state) => {
   return {
     auth: state.auth
+    auth: state.auth,
+    player: state.player,
+    playBack: state.playBack
     }
 }
 

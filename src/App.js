@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom'
 import Login from './Containers/Login'
 import DesktopContainer from './Containers/HomePage'
+import { BrowserRouter as Router} from 'react-router-dom';
 import {connect} from "react-redux"
 import {authorize} from "./Actions/AuthActions"
 import {checkAuthorization} from "./Actions/AuthActions"
 import {addPlayer} from "./Actions/AuthActions"
+import {updatePlayBack} from "./Actions/PlayerActions"
+import Player from './Components/PlayerComponent'
 import './App.css';
 
 class App extends Component {
@@ -26,6 +29,34 @@ class App extends Component {
       this.props.checkAuthorization()
       .then(() => this.props.history.push("/"))
       this.checkForPlayerInterval = setInterval(() => this.checkForPlayer(), 1000)
+    }
+  }
+
+  onStateChanged(state) {
+    // only update if we got a real state
+    if (state !== null) {
+      const {
+        current_track: currentTrack,
+        position,
+        duration,
+      } = state.track_window;
+      const trackName = currentTrack.name;
+      const albumName = currentTrack.album.name;
+      const artistName = currentTrack.artists
+        .map(artist => artist.name)
+        .join(", ");
+      const playing = !state.paused;
+      this.setState({
+        position,
+        duration,
+        trackName,
+        albumName,
+        artistName,
+        playing
+      });
+    } else {
+      // state was null, user might have swapped to another device
+      this.setState({ error: "Looks like you might have swapped to another device?" });
     }
   }
 
@@ -56,6 +87,7 @@ class App extends Component {
           this.props.addPlayer(player)
           this.transferPlayBack(player)
       })
+      player.addListener('player_state_changed', state => this.props.updatePlayBack(state));
   }
     else {
       console.log('player not ready')
@@ -74,14 +106,14 @@ class App extends Component {
 const mapStateToProps = (state) => {
   return {
     auth: state.auth,
-    device: state.device
     }
 }
 
 const mapDispatchToProps = {
     authorize,
     checkAuthorization,
-    addPlayer
+    addPlayer,
+    updatePlayBack
 }
 
 

@@ -15,12 +15,15 @@ const Login = props => {
       <Grid textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
         <Grid.Column style={{ maxWidth: 450 }}>
           <Header as='h1' textAlign='center'>
-            Welcome to Bubble Burster!
+            Bubble Burster
           </Header>
+          <Header.Subheader as='h2'>
+            Bust out of your music bubble!
+          </Header.Subheader>
           <Header as='h2' color='black' textAlign='center'>
              Log-in to your account
           </Header>
-              <Button as="a" href={"http://localhost:3000/api/v1/login"} color='blue' fluid size='large'>
+              <Button as="a" href={"http://localhost:3000/api/v1/login"} color='blue' size='massive'>
                 Login
               </Button>
         </Grid.Column>

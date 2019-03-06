@@ -1,37 +1,99 @@
 import React, {Component} from 'react'
 import {connect} from "react-redux"
-import {getGenres} from ".././Actions/GenreActions"
-import {getAllRecs} from ".././Actions/RecommendationActions"
-import { VictoryGroup, VictoryScatter, VictoryLegend, VictoryLabel, VictoryZoomContainer, VictoryTooltip } from 'victory'
+import {getGenreRecs} from ".././Actions/RecommendationActions"
+import {Grid, Header, Button} from 'semantic-ui-react'
+import {VictoryScatter, VictoryLabel, createContainer } from 'victory'
+const VictoryZoomVoronoiContainer = createContainer("zoom", "voronoi");
 class Genres extends Component {
+
+  constructor(props) {
+  super(props);
+  this.checkForGenreRecsInterval = null;
+}
 
   componentDidMount(){
     console.log("genres")
-    this.props.getGenres()
-    this.props.getAllRecs()
+    this.checkForGenreRecsInterval = setInterval(() => this.checkForGenreRecs(), 1000)
+  }
+
+  checkForGenreRecs = () => {
+    if (this.props.genre_recommendations.length === 0) {
+      this.props.getGenreRecs()
+    }
+  }
+
+  playTrack = (uri) => {
+    fetch("https://api.spotify.com/v1/me/player/play", {
+     method: "PUT",
+     headers: {
+       authorization: `Bearer ${localStorage.getItem('access_token')}`,
+       "Content-Type": "application/json",
+     },
+     body: JSON.stringify({
+       "uris": [`${uri}`]
+     })
+   })
   }
 
   render() {
     return (
-      <VictoryGroup
-        containerComponent={<VictoryZoomContainer zoomDomain={{ x: [0, 75], y: [0, 75] }} />}
-      >
-        <VictoryScatter />
-      </VictoryGroup>
-    )
+      <Grid columns={1} >
+        <Grid.Column >
+          <Header as='h2' textAlign='center'>
+            Genre Recommendations
+          </Header>
+          <Button onClick={this.props.getGenreRecs}>Update Recommendations</Button>
+          <VictoryScatter
+          animate={{ duration: 200 }}
+          padding={ {top: 120, bottom: 175, left: 120, right: 120} }
+          width={700}
+          height={700}
+          containerComponent={<VictoryZoomVoronoiContainer
+            labels={(d) => `${d.artist_name} - ${d.name}`}
+            style={{
+              labels: {fontSize: 20}
+            }}
+          />}
+          style={{
+            data: { fill: "#ff9a00" },
+            labels: {fontSize: 20},
+          }
+          }
+          bubbleProperty="popularity"
+          maxBubbleSize={35}
+          minBubbleSize={10}
+          data={this.props.genre_recommendations.map((track, index) => {
+            return {x: index + 75 , y:Math.random(0,100), uri: track.attributes.uri, popularity: track.attributes.popularity, name: track.attributes.name, artist_name: track.attributes["artist-name"]}})
+          }
+          labels={this.props.genre_recommendations.map(track => `${track.attributes["artist-name"]} - ${track.attributes.name}`)}
+          labelComponent={<VictoryLabel dy={-17.5}/>}
+          events={[
+           {
+             target: "data",
+             eventHandlers: {
+               onClick: () => ({
+                 target: "data",
+                 mutation: (evt) => this.playTrack(evt.datum.uri)
+               })
+             }
+           }
+         ]}
+          />
+        </Grid.Column>
+      </Grid>
+      )
   }
 }
 
 const mapStateToProps = (state) => {
   return {
-    genres: state.genres,
-    recommendations: state.recs.recommendations
+    player: state.auth.player,
+    genre_recommendations: state.recs.genre_recommendations
     }
 }
 
 const mapDispatchToProps = {
-    getGenres,
-    getAllRecs
+    getGenreRecs
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Genres)
