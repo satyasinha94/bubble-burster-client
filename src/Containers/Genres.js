@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from "react-redux"
 import {getGenreRecs} from ".././Actions/RecommendationActions"
-import {Grid, Header, Button, Loader, Dimmer} from 'semantic-ui-react'
+import {Grid, Header, Button, Loader, Dimmer, Icon} from 'semantic-ui-react'
 import {VictoryScatter, VictoryLabel, createContainer } from 'victory'
 const VictoryZoomVoronoiContainer = createContainer("zoom", "voronoi");
 class Genres extends Component {
@@ -42,13 +42,18 @@ class Genres extends Component {
           <Header as='h2' textAlign='center'>
             Genre Recommendations
           </Header>
-          <Button onClick={this.props.getGenreRecs}>Update Recommendations</Button>
+          <Button animated='fade' onClick={this.props.getGenreRecs} color="blue">
+            <Button.Content visible>
+              <Icon name="spotify" size="large"/>
+            </Button.Content>
+            <Button.Content hidden>Update Recommendations</Button.Content>
+          </Button>
           {this.props.genre_recommendations.length === 0 ?
             <Loader active size="huge" inline='centered'>Loading Tracks</Loader> : null}
           <VictoryScatter
           animate={{ duration: 150 }}
           padding={ {top: 120, bottom: 175, left: 120, right: 120} }
-          width={700}
+          width={1500}
           height={700}
           containerComponent={<VictoryZoomVoronoiContainer
             labels={(d) => `${d.artist_name} - ${d.name}`}
@@ -68,7 +73,7 @@ class Genres extends Component {
             return {x: index + 75 , y:Math.random(0,100), uri: track.attributes.uri, popularity: track.attributes.popularity, name: track.attributes.name, artist_name: track.attributes["artist-name"]}})
           }
           labels={this.props.genre_recommendations.map(track => `${track.attributes["artist-name"]} - ${track.attributes.name}`)}
-          labelComponent={<VictoryLabel dy={-17.5}/>}
+          labelComponent={<VictoryLabel dy={-20}/>}
           events={[
            {
              target: "data",

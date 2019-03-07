@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {connect} from "react-redux"
 import {getTracks} from ".././Actions/TrackActions"
 import {getTrackRecs} from ".././Actions/RecommendationActions"
-import {Grid, Button, Header, Loader} from "semantic-ui-react"
+import {Grid, Button, Header, Loader, Icon} from "semantic-ui-react"
 import { VictoryGroup, VictoryLegend, VictoryZoomContainer } from 'victory'
 import {VictoryScatter, VictoryLabel, createContainer } from 'victory'
 const VictoryZoomVoronoiContainer = createContainer("zoom", "voronoi");
@@ -56,7 +56,7 @@ class Tracks extends Component {
                   <Loader active size="huge" inline='centered'>Loading Tracks</Loader> : null}
                 <VictoryScatter
                 animate={{ duration: 150 }}
-                width={600}
+                width={900}
                 height={600}
                 padding={ {top: 100, bottom: 150, left: 100, right: 100} }
                 containerComponent={
@@ -70,7 +70,7 @@ class Tracks extends Component {
                 }
                 }
                 bubbleProperty="popularity"
-                maxBubbleSize={22}
+                maxBubbleSize={30}
                 minBubbleSize={3.5}
                 data={this.state.mappedTracks.map((track, index) => {
                   return {x: index + 75 , y:Math.random(0,100), uri: track.attributes.uri, popularity: track.popularity, name: track.attributes.name}})
@@ -95,10 +95,15 @@ class Tracks extends Component {
                   <Header as='h2' textAlign='center'>
                     My Recommendations
                   </Header>
-                  <Button onClick={this.props.getTrackRecs}>Update Recommendations</Button>
+                  <Button animated='fade' onClick={this.props.getTrackRecs} color="blue">
+                    <Button.Content visible>
+                      <Icon name="spotify" size="large"/>
+                    </Button.Content>
+                    <Button.Content hidden>Update Recommendations</Button.Content>
+                  </Button>
                   <VictoryScatter
                   animate={{ duration: 150 }}
-                  width={600}
+                  width={900}
                   height={600}
                   containerComponent={<VictoryZoomVoronoiContainer
                     labels={(d) => `${d.artist_name} - ${d.name}`}
@@ -110,7 +115,7 @@ class Tracks extends Component {
                   }
                   }
                   bubbleProperty="popularity"
-                  maxBubbleSize={22}
+                  maxBubbleSize={27.5}
                   minBubbleSize={3.5}
                   data={this.props.track_recommendations.map((track, index) => {
                     return {x: index + 75 , y:Math.random(0,100), uri: track.attributes.uri, popularity: track.attributes.popularity, name: track.attributes.name, artist_name: track.attributes["artist-name"]}})
