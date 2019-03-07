@@ -54,3 +54,6 @@
   width: 25%;
   height: 25%;
 }
+.ui.active.inline.loader {
+  top: 35%;
+}

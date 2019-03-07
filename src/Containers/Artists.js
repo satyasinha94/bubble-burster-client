@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {connect} from "react-redux"
 import {getArtists} from ".././Actions/ArtistActions"
 import {getArtistRecs} from ".././Actions/RecommendationActions"
-import {Grid, Header, Button} from "semantic-ui-react"
+import {Grid, Header, Button, Loader} from "semantic-ui-react"
 import {VictoryScatter, VictoryLabel, createContainer } from 'victory'
 const VictoryZoomVoronoiContainer = createContainer("zoom", "voronoi");
 class Artists extends Component {
@@ -63,8 +63,10 @@ class Artists extends Component {
                 <Header as='h2' textAlign='center'>
                   My Top Artists
                 </Header>
+                {this.state.mappedArtists.length === 0 ?
+                  <Loader active size="huge" inline='centered'>Loading Tracks</Loader> : null}
                 <VictoryScatter
-                animate={{ duration: 200 }}
+                animate={{ duration: 150 }}
                 width={550}
                 height={550}
                 padding={ {top: 100, bottom: 150, left: 100, right: 100} }
@@ -106,7 +108,7 @@ class Artists extends Component {
                   </Header>
                   <Button onClick={this.props.getArtistRecs}>Update Recommendations</Button>
                   <VictoryScatter
-                  animate={{ duration: 200 }}
+                  animate={{ duration: 150 }}
                   width={600}
                   height={600}
                   containerComponent={<VictoryZoomVoronoiContainer

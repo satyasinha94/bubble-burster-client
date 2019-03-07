@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {connect} from "react-redux"
 import {getTracks} from ".././Actions/TrackActions"
 import {getTrackRecs} from ".././Actions/RecommendationActions"
-import {Grid, Button, Header} from "semantic-ui-react"
+import {Grid, Button, Header, Loader} from "semantic-ui-react"
 import { VictoryGroup, VictoryLegend, VictoryZoomContainer } from 'victory'
 import {VictoryScatter, VictoryLabel, createContainer } from 'victory'
 const VictoryZoomVoronoiContainer = createContainer("zoom", "voronoi");
@@ -52,8 +52,10 @@ class Tracks extends Component {
                 <Header as='h2' textAlign='center'>
                   My Top Tracks
                 </Header>
+                {this.state.mappedTracks.length === 0 ?
+                  <Loader active size="huge" inline='centered'>Loading Tracks</Loader> : null}
                 <VictoryScatter
-                animate={{ duration: 200 }}
+                animate={{ duration: 150 }}
                 width={600}
                 height={600}
                 padding={ {top: 100, bottom: 150, left: 100, right: 100} }
@@ -95,7 +97,7 @@ class Tracks extends Component {
                   </Header>
                   <Button onClick={this.props.getTrackRecs}>Update Recommendations</Button>
                   <VictoryScatter
-                  animate={{ duration: 200 }}
+                  animate={{ duration: 150 }}
                   width={600}
                   height={600}
                   containerComponent={<VictoryZoomVoronoiContainer

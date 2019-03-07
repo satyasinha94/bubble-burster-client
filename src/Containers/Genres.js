@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from "react-redux"
 import {getGenreRecs} from ".././Actions/RecommendationActions"
-import {Grid, Header, Button} from 'semantic-ui-react'
+import {Grid, Header, Button, Loader, Dimmer} from 'semantic-ui-react'
 import {VictoryScatter, VictoryLabel, createContainer } from 'victory'
 const VictoryZoomVoronoiContainer = createContainer("zoom", "voronoi");
 class Genres extends Component {
@@ -43,8 +43,10 @@ class Genres extends Component {
             Genre Recommendations
           </Header>
           <Button onClick={this.props.getGenreRecs}>Update Recommendations</Button>
+          {this.props.genre_recommendations.length === 0 ?
+            <Loader active size="huge" inline='centered'>Loading Tracks</Loader> : null}
           <VictoryScatter
-          animate={{ duration: 200 }}
+          animate={{ duration: 150 }}
           padding={ {top: 120, bottom: 175, left: 120, right: 120} }
           width={700}
           height={700}
