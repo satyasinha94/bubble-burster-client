@@ -3,7 +3,6 @@ import {connect} from "react-redux"
 import {getTracks} from ".././Actions/TrackActions"
 import {getTrackRecs} from ".././Actions/RecommendationActions"
 import {Grid, Button, Header, Loader, Icon} from "semantic-ui-react"
-import { VictoryGroup, VictoryLegend, VictoryZoomContainer } from 'victory'
 import {VictoryScatter, VictoryLabel, createContainer } from 'victory'
 const VictoryZoomVoronoiContainer = createContainer("zoom", "voronoi");
 
@@ -66,7 +65,7 @@ class Tracks extends Component {
                 }
                 style={{
                   data: { fill: "#fa4659" },
-                  labels: {fontSize: 12.5},
+                  labels: {fontSize: 15.5},
                 }
                 }
                 bubbleProperty="popularity"
@@ -99,7 +98,7 @@ class Tracks extends Component {
                     <Button.Content visible>
                       <Icon name="spotify" size="large"/>
                     </Button.Content>
-                    <Button.Content hidden>Update Recommendations</Button.Content>
+                    <Button.Content hidden >Update Recommendations</Button.Content>
                   </Button>
                   <VictoryScatter
                   animate={{ duration: 150 }}
@@ -111,7 +110,7 @@ class Tracks extends Component {
                   padding={ {top: 100, bottom: 150, left: 100, right: 100} }
                   style={{
                     data: { fill: "#11cbd7" },
-                    labels: {fontSize: 12.5}
+                    labels: {fontSize: 15.5}
                   }
                   }
                   bubbleProperty="popularity"

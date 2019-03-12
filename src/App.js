@@ -2,13 +2,11 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom'
 import Login from './Containers/Login'
 import DesktopContainer from './Containers/HomePage'
-import { BrowserRouter as Router} from 'react-router-dom';
 import {connect} from "react-redux"
 import {authorize} from "./Actions/AuthActions"
 import {checkAuthorization} from "./Actions/AuthActions"
 import {addPlayer} from "./Actions/AuthActions"
 import {updatePlayBack} from "./Actions/PlayerActions"
-import Player from './Components/PlayerComponent'
 import './App.css';
 
 class App extends Component {

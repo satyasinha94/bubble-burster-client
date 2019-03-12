@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from "react-redux"
 import {getGenreRecs} from ".././Actions/RecommendationActions"
-import {Grid, Header, Button, Loader, Dimmer, Icon} from 'semantic-ui-react'
+import {Grid, Header, Button, Loader, Icon} from 'semantic-ui-react'
 import {VictoryScatter, VictoryLabel, createContainer } from 'victory'
 const VictoryZoomVoronoiContainer = createContainer("zoom", "voronoi");
 class Genres extends Component {

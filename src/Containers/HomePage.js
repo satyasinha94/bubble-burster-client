@@ -7,7 +7,7 @@ import Artists from './Artists'
 import Genres from './Genres'
 import Tracks from './Tracks'
 import Player from '../Components/PlayerComponent'
-import {Modal, Header, Button, Icon} from 'semantic-ui-react'
+import {Modal, Header} from 'semantic-ui-react'
 
 
 /* eslint-disable react/no-multi-comp */
@@ -16,7 +16,7 @@ import {Modal, Header, Button, Icon} from 'semantic-ui-react'
  */
 
 
-class DesktopContainer extends Component {
+class HomePage extends Component {
 
   render() {
 
@@ -58,4 +58,4 @@ const mapDispatchToProps = {
     logout
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DesktopContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage)

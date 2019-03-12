@@ -77,7 +77,7 @@ class Artists extends Component {
                 }
                 style={{
                   data: { fill: "#fa4659" },
-                  labels: {fontSize: 12.5},
+                  labels: {fontSize: 15.5},
                 }
                 }
                 bubbleProperty="popularity"
@@ -122,7 +122,7 @@ class Artists extends Component {
                   padding={ {top: 100, bottom: 150, left: 150, right: 150} }
                   style={{
                     data: { fill: "#11cbd7" },
-                    labels: {fontSize: 12.5},
+                    labels: {fontSize: 15.5},
                   }
                   }
                   bubbleProperty="popularity"

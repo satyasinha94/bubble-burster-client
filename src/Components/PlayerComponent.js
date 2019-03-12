@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from "react-redux"
-import {Menu, Button, Icon, Image, Header, Transition, Segment} from 'semantic-ui-react'
+import {Menu, Icon, Image, Header, Transition, Segment} from 'semantic-ui-react'
 
 class Player extends Component {
   renderSidebar = () => {
@@ -32,10 +32,10 @@ const mapStateToProps = (state) => {
   let image
   let album
   if (Object.keys(state.playBack.playBack).length === 0) {
-    let artist = ""
-    let track = ""
-    let image = ""
-    let album = ""
+     artist = ""
+     track = ""
+     image = ""
+     album = ""
   }
   else {
     artist = state.playBack.playBack.track_window.current_track.artists[0].name
