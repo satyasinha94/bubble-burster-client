@@ -1,6 +1,6 @@
 export function getArtists() {
   return (dispatch) => {
-    return fetch(`http://localhost:3000/artists`, {
+    return fetch(`http://localhost:3000/api/v1/artists`, {
 				headers: {
 					"Authorization": localStorage.getItem("jwt")
 				}
