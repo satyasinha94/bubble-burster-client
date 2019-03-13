@@ -1,5 +1,5 @@
 export function getGenres() {
   return (dispatch) => {
-    return fetch(`http://localhost:3000/api/v1/genres`, {
+    return fetch(`https://bubble-burster-api.herokuapp.com/api/v1/genres`, {
     }
   }

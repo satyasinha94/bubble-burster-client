@@ -23,7 +23,7 @@ const Login = props => {
           <Header as='h2' color='black' textAlign='center'>
              Log-in to your account
           </Header>
-              <Button as="a" href={"http://localhost:3000/api/v1/login"} color='blue' size='massive'>
+              <Button as="a" href={"https://bubble-burster-api.herokuapp.com/api/v1/login"} color='blue' size='massive'>
                 Login
               </Button>
         </Grid.Column>
