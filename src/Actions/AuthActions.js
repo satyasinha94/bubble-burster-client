@@ -37,3 +37,18 @@ export function logout() {
       payload: player
     }
   }
+
+  export function deleteAccount() {
+    return (dispatch) => {
+      return fetch(`http://localhost:3000/api/v1/delete_user`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": localStorage.getItem("jwt"),
+          "Content-Type": "application/json"
+        }
+      })
+      .then(() => {
+        dispatch({type: "LOGOUT"})
+      })
+    }
+  }

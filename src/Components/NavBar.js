@@ -3,6 +3,7 @@ import { Menu, Image, Popup} from 'semantic-ui-react'
 import { BrowserRouter as Switch, NavLink} from 'react-router-dom';
 import {connect} from "react-redux"
 import {logout} from ".././Actions/AuthActions"
+import {deleteAccount} from ".././Actions/AuthActions"
 
 const NavBar = props => {
 
@@ -25,6 +26,7 @@ const NavBar = props => {
         on='hover'
         />
         {props.auth.LoggedIn ? <Menu.Item  as={NavLink} to="/" name= "Logout" onClick = {props.logout}> Logout </Menu.Item> : null }
+        <Menu.Item as={NavLink} to="/" name= "Delete" onClick = {props.deleteAccount}> Delete Account </Menu.Item>
         <Menu.Item position="right">
           <Image src={props.auth.user.profile_img_url} avatar/>
           <span>{props.auth.user.username}</span>
@@ -42,7 +44,8 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-    logout
+    logout,
+    deleteAccount
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(NavBar)
