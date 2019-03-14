@@ -1,5 +1,5 @@
-export const BASEURL = "http://localhost:3000"
-// export const BASEURL = "https://bubble-burster-api.herokuapp.com"
+// export const BASEURL = "http://localhost:3000"
+export const BASEURL = "https://bubble-burster-api.herokuapp.com"
 
 export function updateAccess() {
     return fetch(`${BASEURL}/api/v1/refresh`, {
