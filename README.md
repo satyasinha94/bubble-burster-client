@@ -16,7 +16,7 @@ To remove this app's access to your Spotify info, go to your Spotify account, cl
 
 This App Uses:
   - React for its front end.
-  - Rails as an API for its back end [link](https://github.com/satyasinha94/bubble-burster-server).
+  - Rails as an API for its back end [link to repo](https://github.com/satyasinha94/bubble-burster-server).
   - Redux for state management.
   - Victory Chart for data visualization.
   - Semantic-UI-React for styling.
