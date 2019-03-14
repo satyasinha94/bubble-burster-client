@@ -7,13 +7,15 @@ import {authorize} from "./Actions/AuthActions"
 import {checkAuthorization} from "./Actions/AuthActions"
 import {addPlayer} from "./Actions/AuthActions"
 import {updatePlayBack} from "./Actions/PlayerActions"
+import {updateAccess} from "./Helpers/API"
 import './App.css';
 
 class App extends Component {
 
   constructor(props) {
   super(props);
-  this.checkForPlayerInterval = null;
+  this.checkForPlayerInterval = null
+  this.updateAccessInterval = null;
 }
 
   componentDidMount(){
@@ -22,13 +24,16 @@ class App extends Component {
       this.props.authorize(id)
       .then(() => this.props.history.push("/"))
       this.checkForPlayerInterval = setInterval(() => this.checkForPlayer(), 1000)
+      this.updateAccessInterval = setInterval(() => updateAccess(), 3000000)
 		}
     else if (localStorage.getItem("jwt")) {
       this.props.checkAuthorization()
       .then(() => this.props.history.push("/"))
       this.checkForPlayerInterval = setInterval(() => this.checkForPlayer(), 1000)
+      this.updateAccessInterval = setInterval(() => updateAccess(), 3000000)
     }
   }
+
 
   transferPlayBack = (player) => {
     fetch("https://api.spotify.com/v1/me/player", {

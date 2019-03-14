@@ -21,7 +21,6 @@ class HomePage extends Component {
   render() {
 
     return (
-      <div>
       <Router>
         <React.Fragment>
           <NavBar />
@@ -41,7 +40,6 @@ class HomePage extends Component {
           </Modal>
         </React.Fragment>
       </Router>
-      </div>
     )
   }
 }

@@ -1,7 +1,8 @@
+import {BASEURL} from ".././Helpers/API"
 
 export function authorize(id) {
   return (dispatch) => {
-  return fetch(`https://bubble-burster-api.herokuapp.com/api/v1/users/${id}`)
+  return fetch(`${BASEURL}/api/v1/users/${id}`)
     .then(r => r.json())
     .then(myJson => {
       localStorage.setItem("jwt", myJson.jwt)
@@ -20,7 +21,7 @@ export function logout() {
 
   export function checkAuthorization() {
     return (dispatch) => {
-      return fetch(`https://bubble-burster-api.herokuapp.com/api/v1/logged_in`, {
+      return fetch(`${BASEURL}/api/v1/logged_in`, {
   				headers: {
   					"Authorization": localStorage.getItem("jwt")
   				}
@@ -40,7 +41,7 @@ export function logout() {
 
   export function deleteAccount() {
     return (dispatch) => {
-      return fetch(`https://bubble-burster-api.herokuapp.com/api/v1/delete_user`, {
+      return fetch(`${BASEURL}/api/v1/delete_user`, {
         method: "DELETE",
         headers: {
           "Authorization": localStorage.getItem("jwt"),
