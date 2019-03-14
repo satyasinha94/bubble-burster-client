@@ -2,7 +2,7 @@
 
 - Displays top 20 artists, top 20 tracks, and genres that you listen to on Spotify in bubble chart form.
 - Serves recommendations based on your listening habits, with the option to update if you want new ones.
-- Can play any track/artist by clicking a bubble (playback only works with premium account, Spotify's rules).
+- Can play any track/artist by clicking on a bubble (playback only works with premium account, Spotify's rules).
 
 ### How to Use
 
