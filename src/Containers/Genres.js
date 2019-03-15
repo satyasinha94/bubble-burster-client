@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from "react-redux"
 import {getGenreRecs} from ".././Actions/RecommendationActions"
+import {playTrack} from ".././Helpers/API"
 import {Grid, Header, Button, Loader, Icon} from 'semantic-ui-react'
 import {VictoryScatter, VictoryLabel, createContainer } from 'victory'
 const VictoryZoomVoronoiContainer = createContainer("zoom", "voronoi");
@@ -22,23 +23,11 @@ class Genres extends Component {
     }
   }
 
-  playTrack = (uri) => {
-    fetch("https://api.spotify.com/v1/me/player/play", {
-     method: "PUT",
-     headers: {
-       authorization: `Bearer ${localStorage.getItem('access_token')}`,
-       "Content-Type": "application/json",
-     },
-     body: JSON.stringify({
-       "uris": [`${uri}`]
-     })
-   })
-  }
 
   render() {
     return (
       <Grid columns={1} >
-        <Grid.Column >
+        <Grid.Column className="genre">
           <Header as='h2' textAlign='center'>
             Genre Recommendations
           </Header>
@@ -51,10 +40,10 @@ class Genres extends Component {
           {this.props.genre_recommendations.length === 0 ?
             <Loader active size="huge" inline='centered'>Loading Tracks</Loader> : null}
           <VictoryScatter
+          padding={100}
           animate={{ duration: 150 }}
-          padding={ {top: 120, bottom: 175, left: 120, right: 120} }
-          width={1500}
-          height={700}
+          width={1000}
+          height={800}
           containerComponent={<VictoryZoomVoronoiContainer
             labels={(d) => `${d.artist_name} - ${d.name}`}
             style={{
@@ -62,12 +51,12 @@ class Genres extends Component {
             }}
           />}
           style={{
-            data: { fill: "#ff9a00" },
-            labels: {fontSize: 20},
+            data: { fill: "#11cbd7" },
+            labels: {fontSize: 20, fill: "white"},
           }
           }
           bubbleProperty="popularity"
-          maxBubbleSize={35}
+          maxBubbleSize={30}
           minBubbleSize={10}
           data={this.props.genre_recommendations.map((track, index) => {
             return {x: index + 75 , y:Math.random(0,100), uri: track.attributes.uri, popularity: track.attributes.popularity, name: track.attributes.name, artist_name: track.attributes["artist-name"]}})
@@ -80,7 +69,7 @@ class Genres extends Component {
              eventHandlers: {
                onClick: () => ({
                  target: "data",
-                 mutation: (evt) => this.playTrack(evt.datum.uri)
+                 mutation: (evt) => playTrack(evt.datum.uri)
                })
              }
            }

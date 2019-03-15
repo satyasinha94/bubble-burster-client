@@ -33,10 +33,6 @@
 }
 
 
-.column {
-  height: 80vh;
-}
-
 .ui.button {
   width: 40%;
   margin-left: 30%;
@@ -53,7 +49,65 @@
   bottom: 0;
   width: 25%;
   height: 25%;
+  color: white;
 }
+
+h4.ui.header {
+  color:white;
+}
+
 .ui.active.inline.loader {
   top: 35%;
+}
+
+
+.nav {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+  flex-flow: row;
+  color: white;
+  font-weight: bold;
+  font-size: 1.25em;
+}
+
+.avatar {
+  vertical-align: middle;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  float: right;
+}
+
+.profile {
+  float: right;
+  color: white;
+  font-weight: bold;
+  font-size: 1.25em;
+  margin-right: 5px;
+  margin-top: -25px;
+}
+
+a {
+  color: white;
+}
+
+h2.ui.center.aligned.header {
+  color: white;
+}
+
+h2.sub.header {
+  color: white;
+}
+
+h1.ui.center.aligned.header {
+  color: white;
+}
+
+.column.genre {
+  height: 80vh
+}
+
+.column.login {
+  height: 90vh
 }

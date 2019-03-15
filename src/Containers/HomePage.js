@@ -30,7 +30,7 @@ class HomePage extends Component {
           <Player/>
           <Modal defaultOpen closeIcon>
             <Modal.Content>
-              <Header textAlign="center">
+              <Header textAlign="center" color="black">
                 Welcome to Bubble Burster!
               </Header>
               <Header.Subheader textAlign="center">

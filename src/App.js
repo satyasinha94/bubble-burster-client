@@ -52,10 +52,9 @@ class App extends Component {
   checkForPlayer = () => {
     if (window.Spotify) {
       clearInterval(this.checkForPlayerInterval)
-      const token = localStorage.getItem('access_token')
       const player = new window.Spotify.Player({
-        name: 'Mixocracy Player',
-        getOAuthToken: cb => { cb(token); }
+        name: 'Bubble Burster Player',
+        getOAuthToken: cb => { cb(localStorage.getItem('access_token')); }
       })
       player.connect()
       player.addListener('ready', () => {
@@ -63,6 +62,9 @@ class App extends Component {
           this.transferPlayBack(player)
       })
       player.addListener('player_state_changed', state => this.props.updatePlayBack(state));
+      player.on('authentication_error', ({ message }) => {
+        this.checkForPlayer()
+      });
   }
     else {
       console.log('player not ready')

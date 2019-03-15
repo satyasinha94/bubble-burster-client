@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {connect} from "react-redux"
 import {getTracks} from ".././Actions/TrackActions"
 import {getTrackRecs} from ".././Actions/RecommendationActions"
+import {playTrack} from ".././Helpers/API"
 import {Grid, Button, Header, Loader, Icon} from "semantic-ui-react"
 import {VictoryScatter, VictoryLabel, createContainer } from 'victory'
 const VictoryZoomVoronoiContainer = createContainer("zoom", "voronoi");
@@ -30,19 +31,6 @@ class Tracks extends Component {
     })
   }
 
-  playTrack = (uri) => {
-    fetch("https://api.spotify.com/v1/me/player/play", {
-     method: "PUT",
-     headers: {
-       authorization: `Bearer ${localStorage.getItem('access_token')}`,
-       "Content-Type": "application/json",
-     },
-     body: JSON.stringify({
-       "uris": [`${uri}`]
-     })
-   })
-  }
-
   render() {
     return (
       <React.Fragment>
@@ -65,7 +53,7 @@ class Tracks extends Component {
                 }
                 style={{
                   data: { fill: "#fa4659" },
-                  labels: {fontSize: 15.5},
+                  labels: {fontSize: 15.5, fill: "white"},
                 }
                 }
                 bubbleProperty="popularity"
@@ -83,7 +71,7 @@ class Tracks extends Component {
                    eventHandlers: {
                      onClick: () => ({
                        target: "data",
-                       mutation: (evt) => this.playTrack(evt.datum.uri)
+                       mutation: (evt) => playTrack(evt.datum.uri)
                      })
                    }
                  }
@@ -110,7 +98,7 @@ class Tracks extends Component {
                   padding={ {top: 100, bottom: 150, left: 100, right: 100} }
                   style={{
                     data: { fill: "#11cbd7" },
-                    labels: {fontSize: 15.5}
+                    labels: {fontSize: 15.5, fill: "white"}
                   }
                   }
                   bubbleProperty="popularity"
@@ -127,7 +115,7 @@ class Tracks extends Component {
                      eventHandlers: {
                        onClick: () => ({
                          target: "data",
-                         mutation: (evt) => this.playTrack(evt.datum.uri)
+                         mutation: (evt) => playTrack(evt.datum.uri)
                        })
                      }
                    }

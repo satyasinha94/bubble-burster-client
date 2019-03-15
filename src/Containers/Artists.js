@@ -2,9 +2,11 @@ import React, {Component} from 'react'
 import {connect} from "react-redux"
 import {getArtists} from ".././Actions/ArtistActions"
 import {getArtistRecs} from ".././Actions/RecommendationActions"
+import {playTrack} from ".././Helpers/API"
 import {Grid, Header, Button, Loader, Icon} from "semantic-ui-react"
 import {VictoryScatter, VictoryLabel, createContainer } from 'victory'
 const VictoryZoomVoronoiContainer = createContainer("zoom", "voronoi");
+
 class Artists extends Component {
 
   state = {
@@ -26,19 +28,6 @@ class Artists extends Component {
     this.setState({
       mappedArtists: mapArtistPopularity
     })
-  }
-
-  playTrack = (uri) => {
-    fetch("https://api.spotify.com/v1/me/player/play", {
-     method: "PUT",
-     headers: {
-       authorization: `Bearer ${localStorage.getItem('access_token')}`,
-       "Content-Type": "application/json",
-     },
-     body: JSON.stringify({
-       "uris": [`${uri}`]
-     })
-   })
   }
 
   playArtist = (uri) => {
@@ -77,14 +66,14 @@ class Artists extends Component {
                 }
                 style={{
                   data: { fill: "#fa4659" },
-                  labels: {fontSize: 15.5},
+                  labels: {fontSize: 15.5, fill: "white"},
                 }
                 }
                 bubbleProperty="popularity"
                 maxBubbleSize={30}
                 minBubbleSize={3.5}
                 data={this.state.mappedArtists.map((artist, index) => {
-                  return {x: index + 75 , y:Math.random(0,100), uri: artist.attributes.uri, popularity: artist.popularity, name: artist.attributes.name}})
+                  return {x: index + 75 , y:Math.random(0,100), img: artist.attributes["img-url"], uri: artist.attributes.uri, popularity: artist.popularity, name: artist.attributes.name}})
                 }
                 events={[
                  {
@@ -99,7 +88,7 @@ class Artists extends Component {
                ]}
                 labels={this.state.mappedArtists.map(artist => `${artist.attributes.name}
                   Popularity: ${artist.popularity}`)}
-                labelComponent={<VictoryLabel dy={-17.5}/>}
+                labelComponent={<VictoryLabel dy={-17.5} fixLabelOverlap={true}/>}
                   />
                   </Grid.Column>
                   <Grid.Column>
@@ -122,7 +111,7 @@ class Artists extends Component {
                   padding={ {top: 100, bottom: 150, left: 150, right: 150} }
                   style={{
                     data: { fill: "#11cbd7" },
-                    labels: {fontSize: 15.5},
+                    labels: {fontSize: 15.5, fill: "white"},
                   }
                   }
                   bubbleProperty="popularity"
@@ -139,7 +128,7 @@ class Artists extends Component {
                      eventHandlers: {
                        onClick: () => ({
                          target: "data",
-                         mutation: (evt) => this.playTrack(evt.datum.uri)
+                         mutation: (evt) => playTrack(evt.datum.uri)
                        })
                      }
                    }
