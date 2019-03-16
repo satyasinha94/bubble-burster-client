@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom'
 import Login from './Containers/Login'
-import DesktopContainer from './Containers/HomePage'
+import HomePage from './Containers/HomePage'
 import {connect} from "react-redux"
 import {authorize} from "./Actions/AuthActions"
 import {checkAuthorization} from "./Actions/AuthActions"
@@ -52,18 +52,20 @@ class App extends Component {
   checkForPlayer = () => {
     if (window.Spotify) {
       clearInterval(this.checkForPlayerInterval)
-      const player = new window.Spotify.Player({
+      let player = new window.Spotify.Player({
         name: 'Bubble Burster Player',
         getOAuthToken: cb => { cb(localStorage.getItem('access_token')); }
       })
       player.connect()
       player.addListener('ready', () => {
+          console.log('player ready')
           this.props.addPlayer(player)
           this.transferPlayBack(player)
       })
       player.addListener('player_state_changed', state => this.props.updatePlayBack(state));
       player.on('authentication_error', ({ message }) => {
-        this.checkForPlayer()
+        console.log('RE-AUTHENTICATING')
+        updateAccess().then(() => this.checkForPlayer())
       });
   }
     else {
@@ -74,7 +76,7 @@ class App extends Component {
   render() {
     return (
         <React.Fragment>
-          {this.props.auth.LoggedIn ? <DesktopContainer /> : <Login/>}
+          {this.props.auth.LoggedIn ? <HomePage /> : <Login/>}
         </React.Fragment>
     );
   }

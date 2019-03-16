@@ -21,6 +21,9 @@ class Genres extends Component {
     if (this.props.genre_recommendations.length === 0) {
       this.props.getGenreRecs()
     }
+    else {
+      clearInterval(this.checkForGenreRecs)
+    }
   }
 
 
