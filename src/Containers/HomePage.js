@@ -19,7 +19,6 @@ import {Modal, Header} from 'semantic-ui-react'
 class HomePage extends Component {
 
   render() {
-
     return (
       <Router>
         <React.Fragment>
