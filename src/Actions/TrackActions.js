@@ -1,8 +1,6 @@
-import {BASEURL} from ".././Helpers/API"
-
 export function getTracks() {
   return (dispatch) => {
-    return fetch(`${BASEURL}/api/v1/tracks`, {
+    return fetch(`${process.env.REACT_APP_BASEURL}/api/v1/tracks`, {
 				headers: {
 					"Authorization": localStorage.getItem("jwt")
 				}

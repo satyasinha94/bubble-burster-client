@@ -1,7 +1,5 @@
-import {BASEURL} from ".././Helpers/API"
-
 export function getGenres() {
   return (dispatch) => {
-    return fetch(`${BASEURL}/api/v1/genres`, {
+    return fetch(`${process.env.REACT_APP_BASEURL}/api/v1/genres`, {
     }
   }

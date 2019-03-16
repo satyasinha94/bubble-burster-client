@@ -1,8 +1,6 @@
-import {BASEURL} from ".././Helpers/API"
-
 export function getArtists() {
   return (dispatch) => {
-    return fetch(`${BASEURL}/api/v1/artists`, {
+    return fetch(`${process.env.REACT_APP_BASEURL}/api/v1/artists`, {
 				headers: {
 					"Authorization": localStorage.getItem("jwt")
 				}
