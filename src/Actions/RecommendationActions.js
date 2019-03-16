@@ -1,9 +1,7 @@
-import {BASEURL} from ".././Helpers/API"
-
 export function getGenreRecs() {
   return (dispatch) => {
     console.log("getting genre recs")
-    return fetch(`${BASEURL}/api/v1/genre_recs`, {
+    return fetch(`${process.env.REACT_APP_BASEURL}/api/v1/genre_recs`, {
 				headers: {
 					"Authorization": localStorage.getItem("jwt")
 				}
@@ -16,7 +14,7 @@ export function getGenreRecs() {
   export function getArtistRecs() {
     return (dispatch) => {
       console.log("getting artist recs")
-      return fetch(`${BASEURL}/api/v1/artist_recs`, {
+      return fetch(`${process.env.REACT_APP_BASEURL}/api/v1/artist_recs`, {
   				headers: {
   					"Authorization": localStorage.getItem("jwt")
   				}
@@ -29,7 +27,7 @@ export function getGenreRecs() {
   export function getTrackRecs() {
     return (dispatch) => {
       console.log("getting track recs")
-      return fetch(`${BASEURL}/api/v1/track_recs`, {
+      return fetch(`${process.env.REACT_APP_BASEURL}/api/v1/track_recs`, {
           headers: {
             "Authorization": localStorage.getItem("jwt")
           }
