@@ -7,7 +7,8 @@ import {authorize} from "./Actions/AuthActions"
 import {checkAuthorization} from "./Actions/AuthActions"
 import {addPlayer} from "./Actions/AuthActions"
 import {updatePlayBack} from "./Actions/PlayerActions"
-import {updateAccess} from "./Helpers/API"
+import {updateAccess} from "./Helpers/SpotifyAPI"
+import {checkIfTrackSaved} from "./Actions/PlayerActions"
 import './App.css';
 
 class App extends Component {
@@ -62,10 +63,18 @@ class App extends Component {
           this.props.addPlayer(player)
           this.transferPlayBack(player)
       })
-      player.addListener('player_state_changed', state => this.props.updatePlayBack(state));
+      player.addListener('player_state_changed', state => {
+        this.props.updatePlayBack(state)
+        this.props.checkIfTrackSaved(state.track_window.current_track.id)
+      });
       player.on('authentication_error', ({ message }) => {
-        console.log('RE-AUTHENTICATING')
+        console.log(message, 'RE-AUTHENTICATING')
         updateAccess().then(() => this.checkForPlayer())
+      });
+      player.on('playback_error', ({ message }) => {
+        console.error('Failed to perform playback');
+        updateAccess()
+        player.pause()
       });
   }
     else {
@@ -92,7 +101,8 @@ const mapDispatchToProps = {
     authorize,
     checkAuthorization,
     addPlayer,
-    updatePlayBack
+    updatePlayBack,
+    checkIfTrackSaved
 }
 
 

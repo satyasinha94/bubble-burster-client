@@ -4,3 +4,16 @@ export function updatePlayBack(playbackInfo) {
     payload: playbackInfo
   }
 }
+
+export function checkIfTrackSaved(id) {
+  console.log("UPDATING TRACK STATUS")
+  return (dispatch) => {
+    return fetch(`https://api.spotify.com/v1/me/tracks/contains?ids=${id}`, {
+      headers: {
+        authorization: `Bearer ${localStorage.getItem('access_token')}`
+      }
+    })
+    .then(r => r.json())
+    .then(myJson => dispatch({type: "UPDATE_TRACK_STATUS", payload: myJson[0]}))
+  }
+}
