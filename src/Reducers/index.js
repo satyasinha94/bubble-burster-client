@@ -5,6 +5,7 @@ import genreReducer from './genre'
 import trackReducer from './track'
 import recommendationReducer from './recs'
 import playBackReducer from './player'
+import radioReducer from './radio'
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
   genres: genreReducer,
   tracks: trackReducer,
   recs: recommendationReducer,
-  playBack: playBackReducer
+  playBack: playBackReducer,
+  radio: radioReducer
 })
  export default rootReducer

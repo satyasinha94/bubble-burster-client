@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from "react-redux"
 import {getGenreRecs} from ".././Actions/RecommendationActions"
-import {playTrack} from ".././Helpers/API"
+import {playTrack} from ".././Helpers/SpotifyAPI"
 import {Grid, Header, Button, Loader, Icon} from 'semantic-ui-react'
 import {VictoryScatter, VictoryLabel, createContainer } from 'victory'
 const VictoryZoomVoronoiContainer = createContainer("zoom", "voronoi");
