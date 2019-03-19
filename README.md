@@ -27,8 +27,6 @@ This App Uses:
   
   ### Features in Development
   
-  - Radio: Playing a track and then clicking the radio icon will cause the player to continually play new songs, instead of stopping after     one track. Note that this feature is already in place if you click on any of your top artists, and what's in development is the       
-    ability to do this with all tracks. 
+  - Radio: Playing a track and then clicking the radio icon will cause the player to continually play new songs, instead of stopping after     one track. Note that this feature is already in place if you click on any of your top artists, and what's in development is the ability to do this with all tracks. 
  
-  - Updating your library: The option to re-evaluate your top tracks, artists, and genres if you feel that your results are getting    
-    "stale".
+  - Updating your library: The option to re-evaluate your top tracks, artists, and genres if you feel that your results are getting "stale".
