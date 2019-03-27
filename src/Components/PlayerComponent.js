@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from "react-redux"
-import {radioOn, radioOff} from ".././Actions/RadioActions"
+import {radioOn, radioOff, addToQueue, clearQueue} from ".././Actions/RadioActions"
 import {checkIfTrackSaved} from ".././Actions/PlayerActions"
 import radio from '.././Images/radio.png'
 import radio_black from '.././Images/radio_black.png'
@@ -26,12 +26,15 @@ class Player extends Component {
     })
   }
 
-  radioToggle = () => {
+  radioToggle = (id) => {
     if (!this.props.radio) {
       this.props.radioOn()
+      this.props.clearQueue()
+      this.props.addToQueue(id)
     }
     else {
     this.props.radioOff()
+    this.props.clearQueue()
     }
   }
 
@@ -45,7 +48,7 @@ class Player extends Component {
           <div className="like">
             <Image src={this.props.image} size="mini"/>
             {this.props.trackSaved ? <Icon name="heart" size="big" color="red" onClick={e => this.likeToggle(e, this.props.id)}/> : <Icon name="heart outline" size="big" onClick={e => this.likeToggle(e, this.props.id)}/>}
-            {!this.props.radio ? <Image className="radio" src={radio} onClick={this.radioToggle}/> : <Image className="radio" src={radio_black} onClick={this.radioToggle}/> }
+            {!this.props.radio ? <Image className="radio" src={radio} onClick={() => this.radioToggle(this.props.id)}/> : <Image className="radio" src={radio_black} onClick={() => this.radioToggle(this.props.id)}/> }
           </div>
             <Menu.Item>Artist:{this.props.artist && (this.props.artist.length > 25 ? this.props.artist.slice(0, 25) + "..." : this.props.artist)}</Menu.Item>
             <Menu.Item>Album:{this.props.album && (this.props.album.length > 25 ? this.props.album.slice(0, 25) + "..." : this.props.album)}</Menu.Item>
@@ -56,6 +59,7 @@ class Player extends Component {
       </Transition>
     </div>
   }
+
 render() {
     return <div className="footer-container">
       {this.renderSidebar()}
@@ -77,6 +81,9 @@ const mapStateToProps = (state) => {
      album = ""
      id = ""
      radio = ""
+  }
+  else if (!state.playBack.playBack) {
+    window.alert('playback error! Please refresh.')
   }
   else {
     artist = state.playBack.playBack.track_window.current_track.artists[0].name
@@ -102,7 +109,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   checkIfTrackSaved,
   radioOn,
-  radioOff
+  radioOff,
+  addToQueue,
+  clearQueue
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Player)

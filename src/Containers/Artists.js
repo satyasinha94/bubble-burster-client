@@ -20,6 +20,17 @@ class Artists extends Component {
     .then(() => this.mapArtists(this.props.artists.artists))
   }
 
+   updateLibrary = () => {
+      fetch(`${process.env.REACT_APP_BASEURL}/api/v1/update_library`, {
+  				headers: {
+  					"Authorization": localStorage.getItem("jwt")
+  				}
+  			})
+        .then(() => this.props.getArtists())
+        .then(() => this.props.getArtistRecs())
+        .then(() => this.mapArtists(this.props.artists.artists))
+      }
+
   mapArtists = (artists) => {
     let mapArtistPopularity = artists.map(artist => {
       let popularity = artist.relationships["user-artists"].data.find(d => d.username === this.props.user.username).popularity
@@ -52,6 +63,12 @@ class Artists extends Component {
                 <Header as='h2' textAlign='center'>
                   My Top Artists
                 </Header>
+                <Button animated='fade' onClick={this.updateLibrary} color="blue">
+                  <Button.Content visible>
+                    <Icon name="spotify" size="large"/>
+                  </Button.Content>
+                  <Button.Content hidden>Update Library</Button.Content>
+                </Button>
                 {this.state.mappedArtists.length === 0 ?
                   <Loader active size="huge" inline='centered'>Loading Tracks</Loader> : null}
                 <VictoryScatter

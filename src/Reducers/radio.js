@@ -6,7 +6,8 @@ export default (
     switch(action.type){
     case("ADD_TRACKS_TO_QUEUE"):
       return {...state, queue: action.payload}
-    case("CLEAR QUEUE"):
+    case("CLEAR_QUEUE"):
+      console.log('QUEUE CLEARED')
       return {...state, queue: []}
     case("RADIO_ON"):
       return {...state, radio: true}

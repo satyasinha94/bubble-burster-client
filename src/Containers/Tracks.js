@@ -21,6 +21,7 @@ class Tracks extends Component {
     })
     this.props.getTrackRecs()
   }
+
   mapTracks = (tracks) => {
     let mapTrackPopularity = tracks.map(track => {
       let popularity = track.relationships["user-tracks"].data.find(d => d.username === this.props.user.username).popularity
@@ -31,6 +32,17 @@ class Tracks extends Component {
     })
   }
 
+  updateLibrary = () => {
+     fetch(`${process.env.REACT_APP_BASEURL}/api/v1/update_library`, {
+         headers: {
+           "Authorization": localStorage.getItem("jwt")
+         }
+       })
+       .then(() => this.props.getTracks())
+       .then(() => this.props.getTrackRecs())
+       .then(() => this.mapTracks(this.props.tracks.tracks))
+     }
+
   render() {
     return (
       <React.Fragment>
@@ -39,6 +51,12 @@ class Tracks extends Component {
                 <Header as='h2' textAlign='center'>
                   My Top Tracks
                 </Header>
+                <Button animated='fade' onClick={this.updateLibrary} color="blue">
+                  <Button.Content visible>
+                    <Icon name="spotify" size="large"/>
+                  </Button.Content>
+                  <Button.Content hidden>Update Library</Button.Content>
+                </Button>
                 {this.state.mappedTracks.length === 0 ?
                   <Loader active size="huge" inline='centered'>Loading Tracks</Loader> : null}
                 <VictoryScatter
