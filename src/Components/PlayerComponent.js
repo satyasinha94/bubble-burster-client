@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
 import {connect} from "react-redux"
-import {radioOn, radioOff, addToQueue, clearQueue} from ".././Actions/RadioActions"
+import {radioOn, radioOff, addToQueue, clearQueue, updateQueue} from ".././Actions/RadioActions"
 import {checkIfTrackSaved} from ".././Actions/PlayerActions"
+import {playTrack} from ".././Helpers/SpotifyAPI"
 import radio from '.././Images/radio.png'
 import radio_black from '.././Images/radio_black.png'
 import {Menu, Icon, Image, Header, Transition, Segment} from 'semantic-ui-react'
@@ -32,9 +33,40 @@ class Player extends Component {
       this.props.clearQueue()
       this.props.addToQueue(id)
     }
-    else {
+    else if (this.props.radio) {
     this.props.radioOff()
     this.props.clearQueue()
+    this.forceUpdate()
+    }
+  }
+
+  pause = () => {
+    this.props.radioOff()
+    this.props.clearQueue()
+    this.props.player.pause()
+  }
+
+  shouldComponentUpdate(nextProps) {
+  if (this.props.queue.length !== nextProps.queue.length) {
+      return false
+    }
+  return true
+}
+
+  componentDidUpdate() {
+    if (this.props.radio && this.props.queue.length < 5) {
+      this.props.addToQueue(this.props.id)
+    }
+    if (this.props.radio && this.props.paused) {
+      playTrack(this.props.queue[0])
+      this.props.updateQueue(this.props.queue)
+    }
+  }
+
+  skipTrack = () => {
+    if (this.props.radio) {
+      this.props.updateQueue(this.props.queue)
+      playTrack(this.props.queue[0])
     }
   }
 
@@ -53,7 +85,10 @@ class Player extends Component {
             <Menu.Item>Artist:{this.props.artist && (this.props.artist.length > 25 ? this.props.artist.slice(0, 25) + "..." : this.props.artist)}</Menu.Item>
             <Menu.Item>Album:{this.props.album && (this.props.album.length > 25 ? this.props.album.slice(0, 25) + "..." : this.props.album)}</Menu.Item>
             <Menu.Item>Track: {this.props.track && (this.props.track.length > 25 ? this.props.track.slice(0, 25) + "..." : this.props.track)} </Menu.Item>
-            <Menu.Item><Icon name="pause" floated="left" size="large" onClick={() => this.props.player.pause()}/></Menu.Item>
+            <div className="radio-controls">
+              <Menu.Item><Icon name="pause" floated="left" size="large" onClick={this.pause}/></Menu.Item>
+              <Menu.Item><Icon name="forward" size="large" onClick={this.skipTrack}/></Menu.Item>
+            </div>
         </Segment>
         </div>
       </Transition>
@@ -73,7 +108,9 @@ const mapStateToProps = (state) => {
       image,
       album,
       id,
-      radio
+      radio,
+      paused,
+      queue = state.radio.queue
   if (Object.keys(state.playBack.playBack).length === 0) {
      artist = ""
      track = ""
@@ -81,6 +118,7 @@ const mapStateToProps = (state) => {
      album = ""
      id = ""
      radio = ""
+     paused = ""
   }
   else if (!state.playBack.playBack) {
     window.alert('playback error! Please refresh.')
@@ -92,6 +130,7 @@ const mapStateToProps = (state) => {
     album = state.playBack.playBack.track_window.current_track.album.name
     id = state.playBack.playBack.track_window.current_track.id
     radio = state.radio.radio
+    paused = state.playBack.playBack.paused
   }
   return {
     player: state.auth.player,
@@ -102,7 +141,9 @@ const mapStateToProps = (state) => {
     album,
     id,
     trackSaved: state.playBack.trackSaved,
-    radio
+    radio,
+    paused,
+    queue
     }
 }
 
@@ -111,7 +152,8 @@ const mapDispatchToProps = {
   radioOn,
   radioOff,
   addToQueue,
-  clearQueue
+  clearQueue,
+  updateQueue
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Player)

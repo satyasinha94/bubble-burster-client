@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {connect} from "react-redux"
 import {getTracks} from ".././Actions/TrackActions"
 import {getTrackRecs} from ".././Actions/RecommendationActions"
+import {radioOff, clearQueue} from ".././Actions/RadioActions"
 import {playTrack} from ".././Helpers/SpotifyAPI"
 import {Grid, Button, Header, Loader, Icon} from "semantic-ui-react"
 import {VictoryScatter, VictoryLabel, createContainer } from 'victory'
@@ -41,6 +42,12 @@ class Tracks extends Component {
        .then(() => this.props.getTracks())
        .then(() => this.props.getTrackRecs())
        .then(() => this.mapTracks(this.props.tracks.tracks))
+     }
+
+     playTrackAndClearRadio = (uri) => {
+       this.props.radioOff()
+       this.props.clearQueue()
+       playTrack(uri)
      }
 
   render() {
@@ -133,7 +140,7 @@ class Tracks extends Component {
                      eventHandlers: {
                        onClick: () => ({
                          target: "data",
-                         mutation: (evt) => playTrack(evt.datum.uri)
+                         mutation: (evt) => this.playTrackAndClearRadio(evt.datum.uri)
                        })
                      }
                    }
@@ -156,7 +163,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
     getTracks,
-    getTrackRecs
+    getTrackRecs,
+    radioOff,
+    clearQueue
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Tracks)

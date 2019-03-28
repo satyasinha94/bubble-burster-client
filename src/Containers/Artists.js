@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {connect} from "react-redux"
 import {getArtists} from ".././Actions/ArtistActions"
 import {getArtistRecs} from ".././Actions/RecommendationActions"
+import {radioOff, clearQueue} from ".././Actions/RadioActions"
 import {playTrack} from ".././Helpers/SpotifyAPI"
 import {Grid, Header, Button, Loader, Icon} from "semantic-ui-react"
 import {VictoryScatter, VictoryLabel, createContainer } from 'victory'
@@ -42,6 +43,8 @@ class Artists extends Component {
   }
 
   playArtist = (uri) => {
+    this.props.radioOff()
+    this.props.clearQueue()
     fetch("https://api.spotify.com/v1/me/player/play", {
      method: "PUT",
      headers: {
@@ -52,6 +55,12 @@ class Artists extends Component {
        "context_uri": `${uri}`
      })
    })
+  }
+
+  playTrackAndClearRadio = (uri) => {
+    this.props.radioOff()
+    this.props.clearQueue()
+    playTrack(uri)
   }
 
 
@@ -145,7 +154,7 @@ class Artists extends Component {
                      eventHandlers: {
                        onClick: () => ({
                          target: "data",
-                         mutation: (evt) => playTrack(evt.datum.uri)
+                         mutation: (evt) => this.playTrackAndClearRadio(evt.datum.uri)
                        })
                      }
                    }
@@ -168,7 +177,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
     getArtists,
-    getArtistRecs
+    getArtistRecs,
+    radioOff,
+    clearQueue
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Artists)
