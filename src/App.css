@@ -111,7 +111,7 @@ h1.ui.center.aligned.header {
 .column.login {
   height: 90vh
 }
-.like {
+.like, .radio-controls {
   display: flex;
   flex-flow: row;
   align-items: center;

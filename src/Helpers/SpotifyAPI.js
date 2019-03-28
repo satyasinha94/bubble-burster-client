@@ -27,17 +27,3 @@ export function playTrack(uri) {
       }
     })
   }
-
-// export function addToQueue(id) {
-//     fetch(`https://api.spotify.com/v1/recommendations?limit=1&market=US&seed_tracks=${id}`, {
-//       headers: {
-//         authorization: `Bearer ${localStorage.getItem('access_token')}`,
-//         "Content-Type": "application/json",
-//       }
-//     })
-//     .then(r => r.json())
-//     .then(myJson => {
-//       debugger
-//     })
-//   }
-//

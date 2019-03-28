@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {connect} from "react-redux"
 import {getArtists} from ".././Actions/ArtistActions"
 import {getArtistRecs} from ".././Actions/RecommendationActions"
+import {radioOff, clearQueue} from ".././Actions/RadioActions"
 import {playTrack} from ".././Helpers/SpotifyAPI"
 import {Grid, Header, Button, Loader, Icon} from "semantic-ui-react"
 import {VictoryScatter, VictoryLabel, createContainer } from 'victory'
@@ -20,6 +21,17 @@ class Artists extends Component {
     .then(() => this.mapArtists(this.props.artists.artists))
   }
 
+   updateLibrary = () => {
+      fetch(`${process.env.REACT_APP_BASEURL}/api/v1/update_library`, {
+  				headers: {
+  					"Authorization": localStorage.getItem("jwt")
+  				}
+  			})
+        .then(() => this.props.getArtists())
+        .then(() => this.props.getArtistRecs())
+        .then(() => this.mapArtists(this.props.artists.artists))
+      }
+
   mapArtists = (artists) => {
     let mapArtistPopularity = artists.map(artist => {
       let popularity = artist.relationships["user-artists"].data.find(d => d.username === this.props.user.username).popularity
@@ -31,6 +43,8 @@ class Artists extends Component {
   }
 
   playArtist = (uri) => {
+    this.props.radioOff()
+    this.props.clearQueue()
     fetch("https://api.spotify.com/v1/me/player/play", {
      method: "PUT",
      headers: {
@@ -43,6 +57,12 @@ class Artists extends Component {
    })
   }
 
+  playTrackAndClearRadio = (uri) => {
+    this.props.radioOff()
+    this.props.clearQueue()
+    playTrack(uri)
+  }
+
 
   render(){
     return (
@@ -52,6 +72,12 @@ class Artists extends Component {
                 <Header as='h2' textAlign='center'>
                   My Top Artists
                 </Header>
+                <Button animated='fade' onClick={this.updateLibrary} color="blue">
+                  <Button.Content visible>
+                    <Icon name="spotify" size="large"/>
+                  </Button.Content>
+                  <Button.Content hidden>Update Library</Button.Content>
+                </Button>
                 {this.state.mappedArtists.length === 0 ?
                   <Loader active size="huge" inline='centered'>Loading Tracks</Loader> : null}
                 <VictoryScatter
@@ -128,7 +154,7 @@ class Artists extends Component {
                      eventHandlers: {
                        onClick: () => ({
                          target: "data",
-                         mutation: (evt) => playTrack(evt.datum.uri)
+                         mutation: (evt) => this.playTrackAndClearRadio(evt.datum.uri)
                        })
                      }
                    }
@@ -151,7 +177,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
     getArtists,
-    getArtistRecs
+    getArtistRecs,
+    radioOff,
+    clearQueue
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Artists)
