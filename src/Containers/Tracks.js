@@ -96,7 +96,7 @@ class Tracks extends Component {
                    eventHandlers: {
                      onClick: () => ({
                        target: "data",
-                       mutation: (evt) => playTrack(evt.datum.uri)
+                       mutation: (evt) => this.playTrackAndClearRadio(evt.datum.uri)
                      })
                    }
                  }
