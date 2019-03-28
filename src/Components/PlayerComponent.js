@@ -57,7 +57,7 @@ class Player extends Component {
     if (this.props.radio && this.props.queue.length < 5) {
       this.props.addToQueue(this.props.id)
     }
-    if (this.props.radio && this.props.paused) {
+    if (this.props.radio && this.props.paused ) {
       playTrack(this.props.queue[0])
       this.props.updateQueue(this.props.queue)
     }
@@ -73,13 +73,13 @@ class Player extends Component {
 
   renderSidebar = () => {
     return <div className="footer">
-      <Transition visible={!this.props.playBack.playBack.paused} animation='scale' duration={750}>
+      <Transition visible={!this.props.paused} animation='scale' duration={750}>
         <div>
         <Segment size="mini" basic>
           <Header as="h4">Now Playing</Header>
           <div className="like">
             <Image src={this.props.image} size="mini"/>
-            {this.props.trackSaved ? <Icon name="heart" size="big" color="red" onClick={e => this.likeToggle(e, this.props.id)}/> : <Icon name="heart outline" size="big" onClick={e => this.likeToggle(e, this.props.id)}/>}
+            {this.props.trackSaved ? <Icon name="heart" size="big" color="red" onClick={(e) => this.likeToggle(e, this.props.id)}/> : <Icon name="heart outline" size="big" onClick={(e) => this.likeToggle(e, this.props.id)}/>}
             {!this.props.radio ? <Image className="radio" src={radio} onClick={() => this.radioToggle(this.props.id)}/> : <Image className="radio" src={radio_black} onClick={() => this.radioToggle(this.props.id)}/> }
           </div>
             <Menu.Item>Artist:{this.props.artist && (this.props.artist.length > 25 ? this.props.artist.slice(0, 25) + "..." : this.props.artist)}</Menu.Item>
@@ -134,7 +134,6 @@ const mapStateToProps = (state) => {
   }
   return {
     player: state.auth.player,
-    playBack: state.playBack,
     artist,
     track,
     image,

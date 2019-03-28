@@ -25,5 +25,8 @@ export function playTrack(uri) {
       if (r.status === 401) {
         updateAccess().then(() => playTrack(uri))
       }
+      if (r.status === 429) {
+        window.alert('rate limit exceeded! Please refresh.')
+      }
     })
   }
