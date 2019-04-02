@@ -5,7 +5,6 @@ export function authorize(id) {
     .then(myJson => {
       localStorage.setItem("jwt", myJson.jwt)
       localStorage.setItem("access_token", myJson.user.access_token)
-      localStorage.setItem("refresh_token", myJson.user.refresh_token)
       return dispatch({type: "LOGIN", payload: myJson.user})
     })
   }
