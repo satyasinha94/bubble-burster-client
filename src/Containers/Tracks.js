@@ -18,7 +18,7 @@ class Tracks extends Component {
     console.log("tracks")
     this.props.getTracks()
     .then(() => {
-      this.mapTracks(this.props.tracks.tracks)
+      this.mapTracks(this.props.tracks)
     })
     this.props.getTrackRecs()
   }
@@ -41,7 +41,7 @@ class Tracks extends Component {
        })
        .then(() => this.props.getTracks())
        .then(() => this.props.getTrackRecs())
-       .then(() => this.mapTracks(this.props.tracks.tracks))
+       .then(() => this.mapTracks(this.props.tracks))
      }
 
      playTrackAndClearRadio = (uri) => {
@@ -83,7 +83,7 @@ class Tracks extends Component {
                 }
                 bubbleProperty="popularity"
                 maxBubbleSize={30}
-                minBubbleSize={3.5}
+                minBubbleSize={5}
                 data={this.state.mappedTracks.map((track, index) => {
                   return {x: index + 75 , y:Math.random(0,100), uri: track.attributes.uri, popularity: track.popularity, name: track.attributes.name}})
                 }
@@ -128,7 +128,7 @@ class Tracks extends Component {
                   }
                   bubbleProperty="popularity"
                   maxBubbleSize={27.5}
-                  minBubbleSize={3.5}
+                  minBubbleSize={5}
                   data={this.props.track_recommendations.map((track, index) => {
                     return {x: index + 75 , y:Math.random(0,100), uri: track.attributes.uri, popularity: track.attributes.popularity, name: track.attributes.name, artist_name: track.attributes["artist-name"]}})
                   }
@@ -154,8 +154,9 @@ class Tracks extends Component {
 }
 
 const mapStateToProps = (state) => {
+  let tracks = state.tracks.tracks
   return {
-    tracks: state.tracks,
+    tracks,
     user: state.auth.user,
     track_recommendations: state.recs.track_recommendations
     }

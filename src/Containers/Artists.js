@@ -18,7 +18,7 @@ class Artists extends Component {
     console.log("artists")
     this.props.getArtists()
     .then(() => this.props.getArtistRecs())
-    .then(() => this.mapArtists(this.props.artists.artists))
+    .then(() => this.mapArtists(this.props.artists))
   }
 
    updateLibrary = () => {
@@ -29,7 +29,7 @@ class Artists extends Component {
   			})
         .then(() => this.props.getArtists())
         .then(() => this.props.getArtistRecs())
-        .then(() => this.mapArtists(this.props.artists.artists))
+        .then(() => this.mapArtists(this.props.artists))
       }
 
   mapArtists = (artists) => {
@@ -97,7 +97,7 @@ class Artists extends Component {
                 }
                 bubbleProperty="popularity"
                 maxBubbleSize={30}
-                minBubbleSize={3.5}
+                minBubbleSize={5}
                 data={this.state.mappedArtists.map((artist, index) => {
                   return {x: index + 75 , y:Math.random(0,100), img: artist.attributes["img-url"], uri: artist.attributes.uri, popularity: artist.popularity, name: artist.attributes.name}})
                 }
@@ -142,7 +142,7 @@ class Artists extends Component {
                   }
                   bubbleProperty="popularity"
                   maxBubbleSize={27.5}
-                  minBubbleSize={3.5}
+                  minBubbleSize={5}
                   data={this.props.artist_recommendations.map((track, index) => {
                     return {x: index + 75 , y:Math.random(0,100), uri: track.attributes.uri, popularity: track.attributes.popularity, name: track.attributes.name, artist_name: track.attributes["artist-name"]}})
                   }
@@ -168,8 +168,9 @@ class Artists extends Component {
 }
 
 const mapStateToProps = (state) => {
+  let artists = state.artists.artists
   return {
-    artists: state.artists,
+    artists,
     user: state.auth.user,
     artist_recommendations: state.recs.artist_recommendations
     }
