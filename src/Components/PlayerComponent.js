@@ -3,6 +3,7 @@ import {connect} from "react-redux"
 import {radioOn, radioOff, addToQueue, clearQueue, updateQueue} from ".././Actions/RadioActions"
 import {checkIfTrackSaved} from ".././Actions/PlayerActions"
 import {playTrack} from ".././Helpers/SpotifyAPI"
+import {isEmpty} from ".././Helpers/State"
 import radio from '.././Images/radio.png'
 import radio_black from '.././Images/radio_black.png'
 import {Menu, Icon, Image, Header, Transition, Segment} from 'semantic-ui-react'
@@ -111,7 +112,7 @@ const mapStateToProps = (state) => {
       radio,
       paused,
       queue = state.radio.queue
-  if (Object.keys(state.playBack.playBack).length === 0) {
+  if (state.playBack.playBack === null || state.playBack.playBack === undefined || isEmpty(state.playBack.playBack)) {
      artist = ""
      track = ""
      image = ""
