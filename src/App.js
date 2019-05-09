@@ -60,6 +60,14 @@ class App extends Component {
       player.connect()
       player.addListener('ready', () => {
           console.log('player ready')
+          // CHROME 74 CHANGED IFRAME LOADING, NEED TO UPDATE STYLE.DISPLAY FOR MUSIC TO PLAY.
+          const iframe = document.querySelector('iframe[src="https://sdk.scdn.co/embedded/index.html"]');
+          if (iframe) {
+          	iframe.style.display = 'block';
+          	iframe.style.position = 'absolute';
+          	iframe.style.top = '-1000px';
+          	iframe.style.left = '-1000px';
+          }
           this.props.addPlayer(player)
           this.transferPlayBack(player)
       })
