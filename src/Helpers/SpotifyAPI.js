@@ -6,6 +6,7 @@ export function updateAccess() {
     })
     .then(r => r.json())
     .then(myJson => {
+      console.log('ACCESS UPDATED')
       localStorage.setItem("access_token", myJson.access_token)
     })
 }
@@ -22,7 +23,7 @@ export function playTrack(uri) {
       })
     })
     .then(r => {
-      if (r.status === 401) {
+      if (r.status !== 204) {
         updateAccess().then(() => playTrack(uri))
       }
       if (r.status === 429) {

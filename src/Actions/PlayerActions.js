@@ -6,7 +6,6 @@ export function updatePlayBack(playbackInfo) {
 }
 
 export function checkIfTrackSaved(id) {
-  console.log("UPDATING TRACK STATUS")
   return (dispatch) => {
     return fetch(`https://api.spotify.com/v1/me/tracks/contains?ids=${id}`, {
       headers: {

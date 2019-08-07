@@ -24,14 +24,12 @@ export function addToQueue(id) {
 }
 
 export function clearQueue() {
-  console.log('CLEARING QUEUE')
   return {
     type: "CLEAR_QUEUE"
   }
 }
 
 export function updateQueue(queue) {
-  console.log('UPDATING QUEUE')
   return {
     type: "UPDATE_QUEUE",
     payload: queue.slice(1)
