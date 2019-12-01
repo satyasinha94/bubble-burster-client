@@ -9,15 +9,16 @@ import {addPlayer} from "./Actions/AuthActions"
 import {updatePlayBack} from "./Actions/PlayerActions"
 import {updateAccess} from "./Helpers/SpotifyAPI"
 import {checkIfTrackSaved} from "./Actions/PlayerActions"
+import {transferPlayBack} from "./Helpers/SpotifyAPI"
 import './App.css';
 
 class App extends Component {
 
   constructor(props) {
-  super(props);
-  this.checkForPlayerInterval = null
-  this.updateAccessInterval = null;
-}
+    super(props);
+    this.checkForPlayerInterval = null
+    this.updateAccessInterval = null;
+  }
 
   componentDidMount(){
     if (window.location.href.includes("user_id")) {
@@ -30,34 +31,31 @@ class App extends Component {
     else if (localStorage.getItem("jwt")) {
       this.props.checkAuthorization()
       .then(() => this.props.history.push("/"))
+      if (this.props.auth.user.expires_in <= 0) {
+        updateAccess()
+      }
       this.checkForPlayerInterval = setInterval(() => this.checkForPlayer(), 1000)
       this.updateAccessInterval = setInterval(() => updateAccess(), 3000000)
     }
   }
 
-
-  transferPlayBack = (player) => {
-    fetch("https://api.spotify.com/v1/me/player", {
-     method: "PUT",
-     headers: {
-       authorization: `Bearer ${localStorage.getItem('access_token')}`,
-       "Content-Type": "application/json",
-     },
-     body: JSON.stringify({
-       "device_ids": [`${player._options.id}`],
-       "play": false,
-     })
-   })
-  }
-
   checkForPlayer = () => {
     if (window.Spotify) {
+      console.log('checking for player')
       clearInterval(this.checkForPlayerInterval)
       let player = new window.Spotify.Player({
         name: 'Bubble Burster Player',
         getOAuthToken: cb => { cb(localStorage.getItem('access_token')); }
       })
       player.connect()
+      player.addListener('initialization_error', ({ message }) => { 
+        console.error("Initialization error: ", message);
+        updateAccess().then(() => this.checkForPlayer()) 
+      });
+      player.addListener('not_ready', ({ device_id }) => {
+        console.log('Device ID has gone offline', device_id);
+        updateAccess().then(() => this.checkForPlayer())
+      });
       player.addListener('ready', () => {
           console.log('player ready')
           // CHROME 74 CHANGED IFRAME LOADING, NEED TO UPDATE STYLE.DISPLAY FOR MUSIC TO PLAY.
@@ -69,24 +67,21 @@ class App extends Component {
           	iframe.style.left = '-1000px';
           }
           this.props.addPlayer(player)
-          this.transferPlayBack(player)
+          transferPlayBack(player)
       })
       player.addListener('player_state_changed', state => {
         this.props.updatePlayBack(state)
-        this.props.checkIfTrackSaved(state.track_window.current_track.id)
+        state.track_window && this.props.checkIfTrackSaved(state.track_window.current_track.id)
       });
       player.on('authentication_error', ({ message }) => {
         console.log(message, 'RE-AUTHENTICATING')
         updateAccess().then(() => this.checkForPlayer())
       });
       player.on('playback_error', ({ message }) => {
-        console.error('Failed to perform playback');
+        console.error(message, 'Failed to perform playback');
         updateAccess()
         player.pause()
       });
-  }
-    else {
-      console.log('player not ready')
     }
   }
 

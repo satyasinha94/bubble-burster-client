@@ -6,7 +6,7 @@ export function updateAccess() {
     })
     .then(r => r.json())
     .then(myJson => {
-      console.log('ACCESS UPDATED')
+      console.log('RE-AUTHENTICATING')
       localStorage.setItem("access_token", myJson.access_token)
     })
 }
@@ -23,11 +23,25 @@ export function playTrack(uri) {
       })
     })
     .then(r => {
-      if (r.status !== 204) {
+      if (r.status === 401 || r.status === 403) {
         updateAccess().then(() => playTrack(uri))
       }
       if (r.status === 429) {
         window.alert('rate limit exceeded! Please refresh.')
       }
     })
+  }
+
+  export function transferPlayBack (player) {
+    fetch("https://api.spotify.com/v1/me/player", {
+     method: "PUT",
+     headers: {
+       authorization: `Bearer ${localStorage.getItem('access_token')}`,
+       "Content-Type": "application/json",
+     },
+     body: JSON.stringify({
+       "device_ids": [`${player._options.id}`],
+       "play": false,
+     })
+   })
   }
