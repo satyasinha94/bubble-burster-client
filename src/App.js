@@ -25,18 +25,22 @@ class App extends Component {
       let id = parseInt(window.location.href.split("=")[1])
       this.props.authorize(id)
       .then(() => this.props.history.push("/"))
-      if (this.props.auth.user.expires_in <= 0) {
-        updateAccess()
-      }
+      .then(() => {
+        if (this.props.auth.user.expires_in <= 0) {
+          updateAccess()
+        }
+      })
       this.checkForPlayerInterval = setInterval(() => this.checkForPlayer(), 1000)
       this.updateAccessInterval = setInterval(() => updateAccess(), 3000000)
 		}
     else if (localStorage.getItem("jwt")) {
       this.props.checkAuthorization()
       .then(() => this.props.history.push("/"))
-      if (this.props.auth.user.expires_in <= 0) {
-        updateAccess()
-      }
+      .then(() => {
+        if (this.props.auth.user.expires_in <= 0) {
+          updateAccess()
+        }
+      })
       this.checkForPlayerInterval = setInterval(() => this.checkForPlayer(), 1000)
       this.updateAccessInterval = setInterval(() => updateAccess(), 3000000)
     }
