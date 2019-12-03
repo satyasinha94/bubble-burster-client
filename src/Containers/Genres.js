@@ -27,6 +27,10 @@ class Genres extends Component {
     }
   }
 
+  componentWillUnmount() {
+    clearInterval(this.checkForGenreRecsInterval)
+  }
+
   playTrackAndClearRadio = (uri) => {
     this.props.radioOff()
     this.props.clearQueue()

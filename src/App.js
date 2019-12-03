@@ -46,6 +46,11 @@ class App extends Component {
     }
   }
 
+  componentWillUnmount() {
+    clearInterval(this.checkForPlayerInterval)
+    clearInterval(this.updateAccessInterval)
+  }
+
   checkForPlayer = () => {
     if (window.Spotify) {
       console.log('checking for player')
